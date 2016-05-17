@@ -8,7 +8,7 @@ public class MainPerson : MonoBehaviour {
     [Range(1, 3)][SerializeField] private float runSpeed = 1.5f;//Скорость бега
     private float v;//вертикальная ось (W,S or arrow down,arrow up)
     private float h;//вертикальная ось (A,D or arrow left,arrow right)
-    private bool isRight = false;//Переключатель для настроки направления спрайта
+    private bool isRight = true;//Переключатель для настроки направления спрайта
     [SerializeField] private LayerMask m_WhatIsGround;//Что считается землей для функции checkGround()
 
     private Transform m_GroundCheck;//Объект проверки столкновения с землей для функции checkGround()
