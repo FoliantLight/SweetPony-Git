@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
-using System.Collections;
 
 public class MainPerson : MonoBehaviour {
     [SerializeField] private float playerSpeed = 2;//Скорость игрока
@@ -8,7 +7,7 @@ public class MainPerson : MonoBehaviour {
     [Range(1, 3)][SerializeField] private float runSpeed = 1.5f;//Скорость бега
     private float v;//вертикальная ось (W,S or arrow down,arrow up)
     private float h;//вертикальная ось (A,D or arrow left,arrow right)
-    private bool isRight = true;//Переключатель для настроки направления спрайта
+    private bool isRight = false;//Переключатель для настроки направления спрайта
     [SerializeField] private LayerMask m_WhatIsGround;//Что считается землей для функции checkGround()
 
     private Transform m_GroundCheck;//Объект проверки столкновения с землей для функции checkGround()
@@ -30,30 +29,33 @@ public class MainPerson : MonoBehaviour {
 	}
 	
 	void Update () {
-        #region Поворот спрайта в направлении движения. Основное направление вправо (можно изменить)
+        #region Поворот спрайта в направлении движения. Основное направление влево
         float tempScaleX = transform.localScale.x;
-        if (h > 0)
+        if (h != 0)
         {
-            if (!isRight)
+            if (h > 0)
             {
-                if (tempScaleX < 0)
+                if (isRight)
                 {
-                    tempScaleX = -tempScaleX;
+                    if (tempScaleX > 0)
+                    {
+                        tempScaleX = -tempScaleX;
+                    }
+                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
+                    isRight = false;
                 }
-                transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                isRight = true;
             }
-        }
-        else
-        {
-            if (isRight)
+            else
             {
-                if (tempScaleX > 0)
+                if (!isRight)
                 {
-                    tempScaleX = -tempScaleX;
+                    if (tempScaleX < 0)
+                    {
+                        tempScaleX = -tempScaleX;
+                    }
+                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
+                    isRight = true;
                 }
-                transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                isRight = false;
             }
         }
         #endregion
@@ -73,7 +75,7 @@ public class MainPerson : MonoBehaviour {
         if(CrossPlatformInputManager.GetButtonDown("Jump") && checkGround())
         {
             m_Rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-        }
+        }        
     }
 
     bool checkGround()
