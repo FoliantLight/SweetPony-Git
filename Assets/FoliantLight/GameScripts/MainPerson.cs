@@ -7,20 +7,20 @@ public class MainPerson : MonoBehaviour {
     [Range(1, 3)][SerializeField] private float runSpeed = 1.5f;//Скорость бега
     private float v;//вертикальная ось (W,S or arrow down,arrow up)
     private float h;//вертикальная ось (A,D or arrow left,arrow right)
-    private bool isRight = false;//Переключатель для настроки направления спрайта
+    private bool isRight = true;//Переключатель для настроки направления спрайта
     [SerializeField] private LayerMask m_WhatIsGround;//Что считается землей для функции checkGround()
 
     private Transform m_GroundCheck;//Объект проверки столкновения с землей для функции checkGround()
     private Rigidbody2D m_Rigidbody2D;
     //private Transform m_CeilingCheck;//Объект проверки столкновения башки с потолком или другой хренью сверху для функции checkGround()
-    //private Animator m_Anim;//Аниматор (его пока нет)
+    private Animator m_Anim;//Аниматор
 
     private void Awake()
     {
         // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         //m_CeilingCheck = transform.Find("CeilingCheck");//Пока совсем ненужная переменная
-        //m_Anim = GetComponent<Animator>();
+        m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
@@ -70,12 +70,26 @@ public class MainPerson : MonoBehaviour {
         if (h != 0)
         {
             transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
+            m_Anim.SetBool("Walk", true);
         }
-
-        if(CrossPlatformInputManager.GetButtonDown("Jump") && checkGround())
+        else
         {
-            m_Rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-        }        
+            m_Anim.SetBool("Walk", false);
+            m_Anim.Play("Idle_static", 0);
+        }   
+
+        if (checkGround() && CrossPlatformInputManager.GetButtonDown("Jump") && m_Rigidbody2D.velocity.y == 0 || m_Rigidbody2D.velocity.y == 0 && !checkGround())
+        {
+            m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));            
+            m_Anim.SetBool("Walk", false);
+            m_Anim.SetBool("Jump", true);
+        }
+        
+        if (m_Rigidbody2D.velocity.y == 0 && checkGround() && m_Anim.GetBool("Jump"))
+        {
+            m_Anim.SetBool("Fool", true);
+            m_Anim.SetBool("Jump", false);
+        }
     }
 
     bool checkGround()
