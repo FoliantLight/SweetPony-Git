@@ -32,7 +32,7 @@ public class MainPerson : MonoBehaviour {
         #region Поворот спрайта в направлении движения. Основное направление влево
         float tempScaleX = transform.localScale.x;
         if (h != 0)
-        {
+        {            
             if (h > 0)
             {
                 if (isRight)
@@ -56,45 +56,41 @@ public class MainPerson : MonoBehaviour {
                     transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
                     isRight = true;
                 }
-            }
+            }           
         }
-        #endregion
-
+        #endregion   
     }
 
     void FixedUpdate()
     {
+        #region основа движения
         v = CrossPlatformInputManager.GetAxis("Vertical");
         h = CrossPlatformInputManager.GetAxis("Horizontal");
 
-        if (h != 0)
+        m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+        m_Anim.SetBool("Grounded", checkGround());
+        #endregion
+        #region Прыжок
+        if (checkGround())
         {
-            transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
-            m_Anim.SetBool("Walk", true);
-        }
-        else
-        {
-            m_Anim.SetBool("Walk", false);
-            m_Anim.Play("Idle_static", 0);
-        }   
+            if (CrossPlatformInputManager.GetButtonDown("Jump"))
+            {
+                m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                m_Anim.SetBool("Grounded", false);
+            }
 
-        if (checkGround() && CrossPlatformInputManager.GetButtonDown("Jump") && m_Rigidbody2D.velocity.y == 0 || m_Rigidbody2D.velocity.y == 0 && !checkGround())
-        {
-            m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));            
-            m_Anim.SetBool("Walk", false);
-            m_Anim.SetBool("Jump", true);
         }
         
-        if (m_Rigidbody2D.velocity.y == 0 && checkGround() && m_Anim.GetBool("Jump"))
-        {
-            m_Anim.SetBool("Fool", true);
-            m_Anim.SetBool("Jump", false);
-        }
+        #endregion
+        #region Движение
+        m_Anim.SetFloat("hSpeed", h);
+        transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
+        #endregion
     }
 
     bool checkGround()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, 0.2f, m_WhatIsGround);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, 0.1f, m_WhatIsGround);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i].gameObject != gameObject)
