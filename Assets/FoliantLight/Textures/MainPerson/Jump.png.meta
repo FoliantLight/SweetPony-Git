@@ -1,0 +1,200 @@
+fileFormatVersion: 2
+guid: 64db351f68a0e7149a5a3f7bdfe6ec4a
+timeCreated: 1463605278
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Jump_1
+    21300002: jump_2
+    21300004: jump_3
+    21300006: Jump_4
+    21300008: Jump_5
+    21300010: Jump_6
+    21300012: Jump_7
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 512
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Jump_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.50000006, y: 0.08327379}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -0.0000038146973, y: 33.170834}
+        - {x: -16.000004, y: 33.170834}
+        - {x: -16.000004, y: -2.8291664}
+        - {x: 12.999996, y: -2.8291664}
+        - {x: 12.999996, y: 16.170834}
+        - {x: 9.999996, y: 20.170834}
+    - name: jump_2
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.11337133}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 39.064007}
+        - {x: -15, y: 10.064007}
+        - {x: -13, y: -2.9359932}
+        - {x: 12, y: -2.9359932}
+        - {x: 14, y: -1.9359932}
+        - {x: 14, y: 21.064007}
+        - {x: 1, y: 39.064007}
+    - name: jump_3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2498215}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 41.512497}
+        - {x: -14, y: 40.512497}
+        - {x: -14, y: 22.512495}
+        - {x: -8, y: 1.512495}
+        - {x: -5, y: -1.487505}
+        - {x: 5, y: -3.487505}
+        - {x: 15, y: -3.487505}
+        - {x: 15, y: 20.512495}
+        - {x: 8, y: 41.512497}
+    - name: Jump_4
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38662854}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13, y: 41.936005}
+        - {x: -14, y: 38.936005}
+        - {x: -14, y: 11.936003}
+        - {x: -10, y: 0.93600273}
+        - {x: -5, y: -1.0639973}
+        - {x: 5, y: -3.0639973}
+        - {x: 15, y: -3.0639973}
+        - {x: 15, y: 18.936003}
+        - {x: 6, y: 41.936005}
+    - name: Jump_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35688788}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 42.01785}
+        - {x: -14, y: 8.017849}
+        - {x: -13, y: -1.982151}
+        - {x: -3, y: -2.982151}
+        - {x: 13, y: -2.982151}
+        - {x: 15, y: -0.98215103}
+        - {x: 15, y: 18.017849}
+        - {x: 2, y: 42.01785}
+    - name: Jump_6
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.16059951}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 38.758034}
+        - {x: -14, y: 14.758034}
+        - {x: -12, y: 1.7580338}
+        - {x: -9, y: -3.2419662}
+        - {x: 14, y: -3.2419662}
+        - {x: 14, y: 20.758034}
+        - {x: 2, y: 38.758034}
+    - name: Jump_7
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 50
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08327379}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 1, y: -0.8291664}
+        - {x: 2, y: -2.8291664}
+        - {x: 13, y: -2.8291664}
+        - {x: 13, y: 20.170834}
+        - {x: 1, y: 36.170834}
+        - {x: -15, y: 36.170834}
+        - {x: -16, y: 34.170834}
+        - {x: -16, y: 9.170834}
+        - {x: -10, y: -2.8291664}
+        - {x: -1, y: -2.8291664}
+        - {x: 1, y: -0.8291664}
+        - {x: 1, y: 1.1708336}
+        - {x: 2, y: 4.1708336}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
