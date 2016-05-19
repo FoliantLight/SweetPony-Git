@@ -17,10 +17,11 @@ public class MainPerson : MonoBehaviour {
     private Animator m_Anim;//Аниматор
 
     private DateTime lastTrample;
+    private int secToTrample;
+    private System.Random rndSec = new System.Random();
 
     private void Awake()
     {
-        // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         //m_CeilingCheck = transform.Find("CeilingCheck");//Пока совсем ненужная переменная
         m_Anim = GetComponent<Animator>();
@@ -29,6 +30,7 @@ public class MainPerson : MonoBehaviour {
 
     void Start () {
         lastTrample = DateTime.Now;
+        secToTrample = rndSec.Next(30, 60);
 	}
 	
 	void Update () {
@@ -62,11 +64,12 @@ public class MainPerson : MonoBehaviour {
             }           
         }
         #endregion
-        #region топтание на месте. Через каждые 15 сек
-        if ((DateTime.Now - lastTrample).TotalSeconds > 15 && m_Rigidbody2D.velocity.x == 0 && m_Rigidbody2D.velocity.y == 0)
+        #region топтание на месте. Время в рандоме от 30 до 60 секунд
+        if ((DateTime.Now - lastTrample).TotalSeconds > secToTrample && m_Rigidbody2D.velocity.x == 0 && m_Rigidbody2D.velocity.y == 0)
         {
             m_Anim.SetTrigger("Trample");
             lastTrample = DateTime.Now;
+            secToTrample = rndSec.Next(30, 60);
         }
         #endregion
     }
