@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
-using System.Collections;
 
 public class MainPerson : MonoBehaviour {
     [SerializeField] private float playerSpeed = 2;//Скорость игрока
@@ -14,14 +13,14 @@ public class MainPerson : MonoBehaviour {
     private Transform m_GroundCheck;//Объект проверки столкновения с землей для функции checkGround()
     private Rigidbody2D m_Rigidbody2D;
     //private Transform m_CeilingCheck;//Объект проверки столкновения башки с потолком или другой хренью сверху для функции checkGround()
-    //private Animator m_Anim;//Аниматор (его пока нет)
+    private Animator m_Anim;//Аниматор
 
     private void Awake()
     {
         // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         //m_CeilingCheck = transform.Find("CeilingCheck");//Пока совсем ненужная переменная
-        //m_Anim = GetComponent<Animator>();
+        m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
@@ -30,55 +29,68 @@ public class MainPerson : MonoBehaviour {
 	}
 	
 	void Update () {
-        #region Поворот спрайта в направлении движения. Основное направление вправо (можно изменить)
+        #region Поворот спрайта в направлении движения. Основное направление влево
         float tempScaleX = transform.localScale.x;
-        if (h > 0)
-        {
-            if (!isRight)
+        if (h != 0)
+        {            
+            if (h > 0)
             {
-                if (tempScaleX < 0)
+                if (isRight)
                 {
-                    tempScaleX = -tempScaleX;
+                    if (tempScaleX > 0)
+                    {
+                        tempScaleX = -tempScaleX;
+                    }
+                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
+                    isRight = false;
                 }
-                transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                isRight = true;
             }
-        }
-        else
-        {
-            if (isRight)
+            else
             {
-                if (tempScaleX > 0)
+                if (!isRight)
                 {
-                    tempScaleX = -tempScaleX;
+                    if (tempScaleX < 0)
+                    {
+                        tempScaleX = -tempScaleX;
+                    }
+                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
+                    isRight = true;
                 }
-                transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                isRight = false;
-            }
+            }           
         }
-        #endregion
-
+        #endregion   
     }
 
     void FixedUpdate()
     {
+        #region основа движения
         v = CrossPlatformInputManager.GetAxis("Vertical");
         h = CrossPlatformInputManager.GetAxis("Horizontal");
 
-        if (h != 0)
+        m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+        m_Anim.SetBool("Grounded", checkGround());
+        #endregion
+        #region Прыжок
+        if (checkGround())
         {
-            transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
-        }
+            if (CrossPlatformInputManager.GetButtonDown("Jump"))
+            {
+                m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                m_Anim.SetBool("Grounded", false);
+            }
 
-        if(CrossPlatformInputManager.GetButtonDown("Jump") && checkGround())
-        {
-            m_Rigidbody2D.AddForce(new Vector2(0f, jumpForce));
         }
+        
+        #endregion
+        #region Движение
+        m_Anim.SetFloat("hSpeed", h);
+        transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
+        #endregion
     }
 
     bool checkGround()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, 0.2f, m_WhatIsGround);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, 0.1f, m_WhatIsGround);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i].gameObject != gameObject)
