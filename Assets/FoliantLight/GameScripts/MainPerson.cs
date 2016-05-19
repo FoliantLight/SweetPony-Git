@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class MainPerson : MonoBehaviour {
@@ -15,6 +16,8 @@ public class MainPerson : MonoBehaviour {
     //private Transform m_CeilingCheck;//Объект проверки столкновения башки с потолком или другой хренью сверху для функции checkGround()
     private Animator m_Anim;//Аниматор
 
+    private DateTime lastTrample;
+
     private void Awake()
     {
         // Setting up references.
@@ -24,8 +27,8 @@ public class MainPerson : MonoBehaviour {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    void Start () { 
-	
+    void Start () {
+        lastTrample = DateTime.Now;
 	}
 	
 	void Update () {
@@ -58,7 +61,14 @@ public class MainPerson : MonoBehaviour {
                 }
             }           
         }
-        #endregion   
+        #endregion
+        #region топтание на месте. Через каждые 15 сек
+        if ((DateTime.Now - lastTrample).TotalSeconds > 15 && m_Rigidbody2D.velocity.x == 0 && m_Rigidbody2D.velocity.y == 0)
+        {
+            m_Anim.SetTrigger("Trample");
+            lastTrample = DateTime.Now;
+        }
+        #endregion
     }
 
     void FixedUpdate()
