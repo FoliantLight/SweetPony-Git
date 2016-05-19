@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dc70ba4f8d861bc4c95f73feb4933066
-timeCreated: 1463605315
+timeCreated: 1463686096
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -64,14 +64,14 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5071378, y: 0.07}
+      pivot: {x: 0.5, y: 0.07}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 0.6431122, y: 40.1}
-        - {x: -14.356888, y: 40.1}
-        - {x: -14.356888, y: -1.8999996}
-        - {x: 13.643112, y: -1.8999996}
-        - {x: 13.643112, y: 18.1}
+      - - {x: 1, y: 40.1}
+        - {x: -14, y: 40.1}
+        - {x: -14, y: -1.8999996}
+        - {x: 14, y: -1.8999996}
+        - {x: 14, y: 18.1}
     - name: Idle_2
       rect:
         serializedVersion: 2

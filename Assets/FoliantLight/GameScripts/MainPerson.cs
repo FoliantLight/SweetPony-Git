@@ -65,11 +65,18 @@ public class MainPerson : MonoBehaviour {
         }
         #endregion
         #region топтание на месте. Время в рандоме от 30 до 60 секунд
-        if ((DateTime.Now - lastTrample).TotalSeconds > secToTrample && m_Rigidbody2D.velocity.x == 0 && m_Rigidbody2D.velocity.y == 0)
+        if ((DateTime.Now - lastTrample).TotalSeconds > secToTrample)
         {
-            m_Anim.SetTrigger("Trample");
-            lastTrample = DateTime.Now;
-            secToTrample = rndSec.Next(30, 60);
+            if (m_Anim.GetFloat("hSpeed") == 0)
+            {
+                m_Anim.SetTrigger("Trample");
+                lastTrample = DateTime.Now;
+                secToTrample = rndSec.Next(30, 60);
+            }
+            else
+            {
+                lastTrample = DateTime.Now;
+            }
         }
         #endregion
     }
@@ -112,4 +119,5 @@ public class MainPerson : MonoBehaviour {
         }
         return false;
     }
+
 }
