@@ -77,6 +77,7 @@ public class MainPerson : MonoBehaviour {
             {
                 m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));
                 m_Anim.SetBool("Grounded", false);
+                m_Anim.SetBool("jmp", true);
             }
 
         }
