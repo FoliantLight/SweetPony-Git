@@ -4,16 +4,19 @@ using UnityEngine.UI;
 
 public class Auth : MonoBehaviour {
 
-    public static InputField login;
-    public static InputField password;
+    public InputField login;
+    public InputField password;
 
-    public static void submit()
-    {        
-        string responce = Utils.AES_decrypt(Utils.web(Utils.AES_encrypt("login=" + login + "&passwd=" + password)));
-        if (responce.Contains("null"))
-        {
-            responce = "";
-        }
+    public void submit()
+    {
+        string responce = Utils.AES_decrypt(Utils.web("action=" + Utils.AES_encrypt(login.text + "|" + password.text)));
+        Debug.Log(responce);
+    }
+
+    public void clear()
+    {
+        login.text = "";
+        password.text = "";
     }
 
 }
