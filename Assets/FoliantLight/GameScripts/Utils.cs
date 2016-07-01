@@ -8,8 +8,8 @@ using System.Net;
 
 public class Utils : MonoBehaviour {
 
-    private static string AES_Key = "VFlEcXJTenhgTF3Tgo0SnhZ6Q1dFMWdu";
-    private static string AES_IV = "hYoBNju74322HiodEGPPhasnrHJJ04=";
+    private static string AES_Key = "UVNtcnAwUmxyQ0YweVFaSzg3Zlg2RUxUTTVMcGhyWGY=";
+    private static string AES_IV = "T1lWYlppUmp5ekoqMk1JJXlDJXhSRX5pSnpZbC9SfXA=";
 
     public static String AES_encrypt(String Input)
     { 
@@ -64,20 +64,17 @@ public class Utils : MonoBehaviour {
         return Output;
     }
 
-    public static string web(string par)
+    public static string web(string postedData)
     {
-        WebRequest request = WebRequest.Create("https://mq.sweetpony.ru/utils/remote.php");
-        string postData = string.Concat(par);
-        byte[] data = Encoding.UTF8.GetBytes(postData);
-        request.Method = "POST";
-        request.ContentType = "application/x-www-form-urlencoded";
-        request.ContentLength = (long)data.Length;
-        Stream dataStream = request.GetRequestStream();
-        dataStream.Write(data, 0, data.Length);
-        dataStream.Close();
-        WebResponse response = request.GetResponse();
-        string responseFromServer = new StreamReader(response.GetResponseStream()).ReadToEnd();
-        return responseFromServer;
-    }
+        UTF8Encoding encoding = new UTF8Encoding();
+        var bytes = encoding.GetBytes(postedData);
 
+        ServicePointManager.ServerCertificateValidationCallback += delegate { return true; }; 
+        WebClient webClient = new WebClient();
+        webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
+        byte[] byteResult = webClient.UploadData("https://mq.sweetpony.ru/utils/remote.php", "POST", bytes);
+        string responceText = Encoding.UTF8.GetString(byteResult);
+        return responceText;
+    }
 }
