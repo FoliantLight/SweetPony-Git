@@ -3,9 +3,9 @@ using System.Collections;
 
 public class MenuController : MonoBehaviour {
 
-    private GameObject authPanel;
-    private GameObject regPanel;
-    private GameObject menuPanel;
+    private static GameObject authPanel;
+    private static GameObject regPanel;
+    private static GameObject menuPanel;
 
     void Awake()
     {
@@ -21,7 +21,7 @@ public class MenuController : MonoBehaviour {
         menuPanel.SetActive(true);
     }
 	
-    public void setActivePanel(string input)
+    public static void setActivePanel(string input)
     {
         authPanel.SetActive(false);
         regPanel.SetActive(false);
