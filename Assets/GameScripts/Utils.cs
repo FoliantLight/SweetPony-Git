@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Text;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 public class Utils : MonoBehaviour {
 
@@ -69,12 +71,13 @@ public class Utils : MonoBehaviour {
         UTF8Encoding encoding = new UTF8Encoding();
         var bytes = encoding.GetBytes(postedData);
 
-        ServicePointManager.ServerCertificateValidationCallback += delegate { return true; }; 
+        ServicePointManager.ServerCertificateValidationCallback += (s, ce, ca, p) => true;
         WebClient webClient = new WebClient();
         webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
 
         byte[] byteResult = webClient.UploadData("https://mq.sweetpony.ru/utils/remote.php", "POST", bytes);
         string responceText = Encoding.UTF8.GetString(byteResult);
         return responceText;
-    }
+    }    
+   
 }
