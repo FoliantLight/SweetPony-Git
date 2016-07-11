@@ -8,31 +8,25 @@ namespace Assets.NPC
 {
     public class NPCDialog
     {
-        /// <summary>
-        /// Узел XML, содержащий записи диалога
-        /// </summary>
-        XmlNode Root;
+        /// <summary>Узел XML, содержащий записи диалога</summary>
+        XmlNode root;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary> </summary>
         /// <param name="Root">Узел XML, содержащий записи диалога</param>
-        public NPCDialog(XmlNode Root)
+        public NPCDialog(XmlNode root)
         {
-            this.Root = Root;
+            this.root = root;
         }
 
-        /// <summary>
-        /// Получение нового вопроса после выбора одного из ответов
-        /// </summary>
-        /// <param name="QuestionNumber">Номер вопроса, например 1.1</param>
-        /// <param name="AnswerIndex">Номер ответа на вопрос</param>
+        /// <summary>Получение нового вопроса после выбора одного из ответов</summary>
+        /// <param name="questionNumber">Номер вопроса, например 1.1</param>
+        /// <param name="answerIndex">Номер ответа на вопрос</param>
         /// <returns></returns>
-        public NPCEntry GetEntry(string QuestionNumber, int AnswerIndex)
+        public NPCEntry getEntry(string questionNumber, int answerIndex)
         {
-            var node = Root.SelectSingleNode("entry[@id='"
-                + QuestionNumber
-                + (AnswerIndex == 0 ? "" : "." + AnswerIndex)
+            var node = root.SelectSingleNode("entry[@id='"
+                + questionNumber
+                + (answerIndex == 0 ? "" : "." + answerIndex)
                 + "']");
             var entry = new NPCEntry(node);
             return entry;

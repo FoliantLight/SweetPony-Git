@@ -6,54 +6,38 @@ using System.Xml;
 
 namespace Assets.NPC
 { 
-    /// <summary>
-    /// Диалоговая запись
-    /// Вопрос NPC и варианты ответа MainPerson
-    /// </summary>
+    /// <summary>Диалоговая запись. Вопрос NPC и варианты ответа MainPerson.</summary>
     public class NPCEntry
-    {
-        // new NPCEntry(){Question = "123", Answer = new List<string>(){"a","b"}};
-       
-        /// <summary>
-        /// Вопрос NPC
-        /// </summary>
-        public string Question;
+    { 
+        /// <summary>Вопрос NPC</summary>
+        public string question;
 
-        /// <summary>
-        /// Номер вопроса. 
-        /// Номер ответа генерируется так:
-        /// Number + "." + выбранный номер в списке ответов.
-        /// Нумерация в списке ответов с нуля.
-        /// </summary>
-        public string Number;
+        /// <summary>Номер вопроса: номер предыдущего + . + номер ответа с 1</summary>
+        public string number;
 
-        /// <summary>
-        /// Список возможных ответов. 
-        /// Может быть пустым.
-        /// </summary>
-        public List<string> Answers;
+        /// <summary>Список возможных ответов</summary>
+        public List<string> answers;
 
-        /// <summary>
-        /// Создание диалоговой записи - вопроса и ответов из строк
-        /// </summary>
-        /// <param name="Question">Вопрос NPC</param>
-        /// <param name="Number">Номер вопроса. Пример: 1.3.2</param>
-        /// <param name="Answers">Несколько вариантов ответа</param>
-        public NPCEntry(string Question, string Number, params string[] Answers)
+        /// <summary>Диалоговая запись - вопрос и ответы из строк</summary>
+        /// <param name="question">Вопрос NPC</param>
+        /// <param name="number">Номер вопроса. Пример: 1.3.2</param>
+        /// <param name="answers">Несколько вариантов ответа</param>
+        public NPCEntry(string question, string number, params string[] answers)
         {
-            this.Question = Question;
-            this.Number = Number;
-            this.Answers = Answers.ToList<string>();
+            this.question = question;
+            this.number = number;
+            this.answers = answers.ToList<string>();
         }
 
-
+        /// <summary>Диалоговая запись - вопрос и ответы из узла XML</summary>
+        /// <param name="xml"></param>
         public NPCEntry(XmlNode xml)
         {
-            Question = xml.Attributes.GetNamedItem("q").Value;
-            Number = xml.Attributes.GetNamedItem("id").Value;
-            Answers = new List<string>();
+            question = xml.Attributes.GetNamedItem("q").Value;
+            number = xml.Attributes.GetNamedItem("id").Value;
+            answers = new List<string>();
             foreach (XmlNode ch in xml.ChildNodes)
-                Answers.Add(ch.InnerText);
+                answers.Add(ch.InnerText);
         }        
     }
 }
