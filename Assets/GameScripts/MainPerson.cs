@@ -30,7 +30,7 @@ public class MainPerson : MonoBehaviour {
 
     void Start () {
         lastTrample = DateTime.Now;
-        secToTrample = rndSec.Next(30, 60);
+        secToTrample = rndSec.Next(5, 15);
 	}
 	
 	void Update () {
@@ -71,7 +71,7 @@ public class MainPerson : MonoBehaviour {
             {
                 m_Anim.SetTrigger("Trample");
                 lastTrample = DateTime.Now;
-                secToTrample = rndSec.Next(30, 60);
+                secToTrample = rndSec.Next(5, 15);
             }
             else
             {

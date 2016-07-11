@@ -13,7 +13,6 @@ public class BackgroundParallax : MonoBehaviour
     SpriteRenderer sprite;
 
     private float depth = 1;
-    public float speed = 1;
     private float v;
     private float h;
 
