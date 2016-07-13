@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class ActionItem : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    private BoxCollider2D boxCollider;
+    // Use this for initialization
+    void Start () {
+        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider.isTrigger = true;
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {

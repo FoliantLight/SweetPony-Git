@@ -22,7 +22,7 @@ public class BackgroundParallax : MonoBehaviour
         // Get the current sprite with an unscaled size
         sprite = GetComponent<SpriteRenderer>();
         Vector2 spriteSize = new Vector2(sprite.bounds.size.x, sprite.bounds.size.y);
-        transform.position += new Vector3(spriteSize.x * 2, 0);
+        transform.position += new Vector3(spriteSize.x * 3, 0);
 
         // Generate a child prefab of the sprite renderer
         GameObject childPrefab = new GameObject();
@@ -33,7 +33,7 @@ public class BackgroundParallax : MonoBehaviour
 
         // Loop through and spit out repeated tiles
         GameObject child;
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < 7; i++)
         {
             child = Instantiate(childPrefab) as GameObject;
             child.transform.position = transform.position - (new Vector3(spriteSize.x, 0, 0) * i);

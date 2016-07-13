@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - car
+  - ActionItem
+  - door
+  - inside
   layers:
   - Default
   - TransparentFX
