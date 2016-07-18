@@ -5,7 +5,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class MainPerson : MonoBehaviour {
     [SerializeField] private float playerSpeed = 2;//Скорость игрока
     [SerializeField] private float jumpForce = 500;//Сила прыжка
-    [Range(1, 3)][SerializeField] private float runSpeed = 1.5f;//Скорость бега
+    private float runSpeed = 2;//Скорость бега *****Константа*****
     private float v;//вертикальная ось (W,S or arrow down,arrow up)
     private float h;//вертикальная ось (A,D or arrow left,arrow right)
     private bool isRight = true;//Переключатель для настроки направления спрайта
@@ -30,7 +30,7 @@ public class MainPerson : MonoBehaviour {
 
     void Start () {
         lastTrample = DateTime.Now;
-        secToTrample = rndSec.Next(30, 60);
+        secToTrample = rndSec.Next(5, 15);
 	}
 	
 	void Update () {
@@ -71,7 +71,7 @@ public class MainPerson : MonoBehaviour {
             {
                 m_Anim.SetTrigger("Trample");
                 lastTrample = DateTime.Now;
-                secToTrample = rndSec.Next(30, 60);
+                secToTrample = rndSec.Next(5, 15);
             }
             else
             {
@@ -101,9 +101,13 @@ public class MainPerson : MonoBehaviour {
             }
 
         }
-        
+
         #endregion
         #region Движение
+        if (CrossPlatformInputManager.GetButton("Run"))
+        {
+            h *= runSpeed;
+        }
         m_Anim.SetFloat("hSpeed", h);
         transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
         #endregion
