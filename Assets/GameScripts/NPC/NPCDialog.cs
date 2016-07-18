@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace Assets.NPC
-{
+
     public class NPCDialog
     {
         /// <summary>Узел XML, содержащий записи диалога</summary>
@@ -34,4 +33,4 @@ namespace Assets.NPC
 
     }
 
-}
+

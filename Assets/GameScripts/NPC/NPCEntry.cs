@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace Assets.NPC
-{ 
     /// <summary>Диалоговая запись. Вопрос NPC и варианты ответа MainPerson.</summary>
     public class NPCEntry
     { 
@@ -40,4 +38,4 @@ namespace Assets.NPC
                 answers.Add(ch.InnerText);
         }        
     }
-}
+

@@ -5,8 +5,7 @@ using System.Text;
 using UnityEngine;
 using System.Xml;
 
-namespace Assets.NPC
-{
+
     public class NPC
     {
         /// <summary>Имя нипа. Определяет xml с диалогом и другие файлы для нипа, если понадобится</summary>
@@ -42,4 +41,4 @@ namespace Assets.NPC
 
 
     }
-}
+
