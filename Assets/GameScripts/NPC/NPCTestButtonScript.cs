@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.IO;
 
-namespace Assets.NPC
-{
     public class NPCTestButtonScript : MonoBehaviour
     {
-
         // Use this for initialization
         void Start()
         {
@@ -20,7 +19,25 @@ namespace Assets.NPC
 
         public void onClick()
         {
-            var npc = new NPC("test");
+
+
+        while (true)
+        {
+            try
+            {
+   
+
+                var npc = new NPC("Luna");
+                var e1 =  npc.start();
+                var e2 = npc.getEntry(2);
+                var e3 = npc.getEntry(1);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        
+                
         }
     }
-}
+

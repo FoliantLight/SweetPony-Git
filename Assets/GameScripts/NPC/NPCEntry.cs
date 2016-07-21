@@ -4,38 +4,48 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-    /// <summary>Диалоговая запись. Вопрос NPC и варианты ответа MainPerson.</summary>
-    public class NPCEntry
-    { 
-        /// <summary>Вопрос NPC</summary>
-        public string question;
+/// <summary>Диалоговая запись. Вопрос NPC и варианты ответа MainPerson.</summary>
+public class NPCEntry
+{ 
+    /// <summary>Вопрос NPC</summary>
+    public string question;
 
-        /// <summary>Номер вопроса: номер предыдущего + . + номер ответа с 1</summary>
-        public string number;
+    /// <summary>Номер вопроса: номер предыдущего + . + номер ответа с 1</summary>
+    public string number;
 
-        /// <summary>Список возможных ответов</summary>
-        public List<string> answers;
+    /// <summary>Название анимации, которую воспроизводит НИП ожидая ответа игрока</summary>
+    public string animation;
 
-        /// <summary>Диалоговая запись - вопрос и ответы из строк</summary>
-        /// <param name="question">Вопрос NPC</param>
-        /// <param name="number">Номер вопроса. Пример: 1.3.2</param>
-        /// <param name="answers">Несколько вариантов ответа</param>
-        public NPCEntry(string question, string number, params string[] answers)
+    /// <summary>Завершается ли диалог этой записью</summary>
+    public bool isFinish = false;
+
+    /// <summary>Список квестов, полученных в этой записи</summary>
+    public List<Quest> quest = new List<Quest>();
+
+    /// <summary>Список наборов предметов, полученных в этой записи</summary>
+    public List<ItemSet> items = new List<ItemSet>();
+
+    /// <summary>Список возможных ответов</summary>
+    public List<string> answers = new List<string>();
+
+    /// <summary>Список изменения дружелюбности для разных ответов</summary>
+    public List<int> friendly = new List<int>();
+
+    /// <summary>Диалоговая запись - вопрос и ответы из узла XML</summary>
+    /// <param name="xml"></param>
+    public NPCEntry(XmlNode xml)
+    {
+        question = xml.Attributes.GetNamedItem("question").Value;
+        number = xml.Attributes.GetNamedItem("id").Value;
+        animation = xml.Attributes.GetNamedItem("animation").Value;
+        foreach (XmlNode ch in xml.SelectNodes("answ"))
         {
-            this.question = question;
-            this.number = number;
-            this.answers = answers.ToList<string>();
+            friendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
+            answers.Add(ch.InnerText);
         }
-
-        /// <summary>Диалоговая запись - вопрос и ответы из узла XML</summary>
-        /// <param name="xml"></param>
-        public NPCEntry(XmlNode xml)
-        {
-            question = xml.Attributes.GetNamedItem("q").Value;
-            number = xml.Attributes.GetNamedItem("id").Value;
-            answers = new List<string>();
-            foreach (XmlNode ch in xml.ChildNodes)
-                answers.Add(ch.InnerText);
-        }        
-    }
+        isFinish = (answers.Count == 0);
+        items = ItemSet.parse(xml);
+        quest = Quest.parse(xml);
+    }   
+}
 

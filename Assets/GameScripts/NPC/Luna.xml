@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<npc name="Luna" x="-3" y="0.5" z="0">
+	<recieved_quests>
+		<quest id="24">
+			<item count="1">Обещанный инвентарь</item>
+		</quest>
+	</recieved_quests>
+	<dialog>
+		<entry id="1" question="Вопрос 1 ?" animation="">
+			<answ  friendly="+100">Ответ 1.1</answ>
+			<answ friendly="-10">Ответ 1.2</answ>
+		</entry>
+		<entry id="1.1" question="Вопрос 1.1 ?" animation="jump">
+			<answ  friendly="+10">Ответ 1.1.1</answ>
+			<answ friendly="-10">Ответ 1.1.2</answ>
+		</entry>
+		<entry id="1.2" question="Атака 1.2" animation="kiсk">
+			<answ friendly="+100">Кинуть плюшевым мишкой 1.2.1</answ>
+			<answ friendly="0">Уйти 1.2.2</answ>
+		</entry>
+		<entry id="1.2.1" question="Завершение диалога 1.2.1" animation="hug_bear">
+			<item count="64">Инвентарь</item>
+			<quest id="24">
+				<item count="1">Обещанный инвентарь</item>
+			</quest>
+		</entry>
+		<entry id="1.2.2" question="Вы пытались" animation="">
+		</entry>
+		<default question="Завершение диалога по умолчанию" animation="">
+			<item count="1">Параспрайт</item>
+		</default>
+	</dialog>
+</npc>
