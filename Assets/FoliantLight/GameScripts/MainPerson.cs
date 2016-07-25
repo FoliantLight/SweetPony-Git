@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
-using System.Collections;
 
 public class MainPerson : MonoBehaviour {
     [SerializeField] private float playerSpeed = 2;//Скорость игрока
@@ -14,14 +13,14 @@ public class MainPerson : MonoBehaviour {
     private Transform m_GroundCheck;//Объект проверки столкновения с землей для функции checkGround()
     private Rigidbody2D m_Rigidbody2D;
     //private Transform m_CeilingCheck;//Объект проверки столкновения башки с потолком или другой хренью сверху для функции checkGround()
-    //private Animator m_Anim;//Аниматор (его пока нет)
+    private Animator m_Anim;//Аниматор
 
     private void Awake()
     {
         // Setting up references.
         m_GroundCheck = transform.Find("GroundCheck");
         //m_CeilingCheck = transform.Find("CeilingCheck");//Пока совсем ненужная переменная
-        //m_Anim = GetComponent<Animator>();
+        m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
@@ -30,30 +29,33 @@ public class MainPerson : MonoBehaviour {
 	}
 	
 	void Update () {
-        #region Поворот спрайта в направлении движения. Основное направление вправо (можно изменить)
+        #region Поворот спрайта в направлении движения. Основное направление влево
         float tempScaleX = transform.localScale.x;
-        if (h > 0)
+        if (h != 0)
         {
-            if (!isRight)
+            if (h > 0)
             {
-                if (tempScaleX < 0)
+                if (isRight)
                 {
-                    tempScaleX = -tempScaleX;
+                    if (tempScaleX > 0)
+                    {
+                        tempScaleX = -tempScaleX;
+                    }
+                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
+                    isRight = false;
                 }
-                transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                isRight = true;
             }
-        }
-        else
-        {
-            if (isRight)
+            else
             {
-                if (tempScaleX > 0)
+                if (!isRight)
                 {
-                    tempScaleX = -tempScaleX;
+                    if (tempScaleX < 0)
+                    {
+                        tempScaleX = -tempScaleX;
+                    }
+                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
+                    isRight = true;
                 }
-                transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                isRight = false;
             }
         }
         #endregion
@@ -68,11 +70,25 @@ public class MainPerson : MonoBehaviour {
         if (h != 0)
         {
             transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
+            m_Anim.SetBool("Walk", true);
         }
-
-        if(CrossPlatformInputManager.GetButtonDown("Jump") && checkGround())
+        else
         {
-            m_Rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+            m_Anim.SetBool("Walk", false);
+            m_Anim.Play("Idle_static", 0);
+        }   
+
+        if (checkGround() && CrossPlatformInputManager.GetButtonDown("Jump") && m_Rigidbody2D.velocity.y == 0 || m_Rigidbody2D.velocity.y == 0 && !checkGround())
+        {
+            m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));            
+            m_Anim.SetBool("Walk", false);
+            m_Anim.SetBool("Jump", true);
+        }
+        
+        if (m_Rigidbody2D.velocity.y == 0 && checkGround() && m_Anim.GetBool("Jump"))
+        {
+            m_Anim.SetBool("Fool", true);
+            m_Anim.SetBool("Jump", false);
         }
     }
 
