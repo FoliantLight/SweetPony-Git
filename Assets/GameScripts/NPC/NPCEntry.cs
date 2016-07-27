@@ -31,8 +31,10 @@ public class NPCEntry
     /// <summary>Список возможных ответов</summary>
     public List<string> answers = new List<string>();
 
-    /// <summary>Список изменения дружелюбности для разных ответов</summary>
-    public List<int> friendly = new List<int>();
+    /// <summary>Список изменения дружелюбности для предыдущих ответов</summary>
+    public List<int> currFriendly = new List<int>();
+    public List<int> prevFriendly;
+
 
     /// <summary>Имя, которым себя назвал НИП. Если пустое - значит еще не назвал</summary>
     public string name = "";
@@ -42,11 +44,12 @@ public class NPCEntry
     public NPCEntry(XmlNode xml)
     {
         question = xml.Attributes.GetNamedItem("question").Value;
-        number = xml.Attributes.GetNamedItem("id").Value;
+        if (xml.Name != "default")
+            number = xml.Attributes.GetNamedItem("id").Value;
         animation = xml.Attributes.GetNamedItem("animation").Value;
         foreach (XmlNode ch in xml.SelectNodes("answ"))
         {
-            friendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
+            currFriendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
             answers.Add(ch.InnerText);
         }
         isFinish = (answers.Count == 0);

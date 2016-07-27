@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
@@ -19,6 +20,21 @@ public class MainPerson : MonoBehaviour {
     private DateTime lastTrample;
     private int secToTrample;
     private System.Random rndSec = new System.Random();
+
+    /// <summary>Престиж (дружелюбность)</summary>
+    public int prestige = 0;
+
+    /// <summary>Номера выполненных квестов для получения награды за них у какого-либо НИПа при встрече с ним</summary>
+    public List<int> doneQuests = new List<int>();
+
+    /// <summary>Полученные, но еще не выполненные квесты</summary>
+    public List<Quest> recievedQuests = new List<Quest>();
+
+    /// <summary>Инвентарь</summary>
+    public Inventory inventory = new Inventory();
+
+    /// <summary>Список встреченных НИПов, имена которыхх известны игроку</summary>
+    public List<string> metNames = new List<string>();
 
     private void Awake()
     {

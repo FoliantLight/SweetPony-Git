@@ -12,6 +12,12 @@ public class Quest
     public List<ItemSet> drop = new List<ItemSet>();
     /// <summary>Выполнен ли квест</summary>
     public bool isDone = false;
+    /// <summary>Сколько баллов престижа можно получить за выполнение этого квеста</summary>
+    public int prestige = 0;
+    /// <summary>Минимальное количество баллов престижа, которое может быть у игорока для получения этого квеста</summary>
+    public int minPrestige = 0;
+    /// <summary>Максимальное количество баллов престижа, которое может быть у игорока для получения этого квеста</summary>
+    public int maxPrestige = 0;
 
     /// <summary>Создание квеста</summary>
     /// <param name="id">Номер квеста. Идентификатор</param>
@@ -34,6 +40,7 @@ public class Quest
     public static List<Quest> parse(XmlNode root)
     {
         var res = new List<Quest>();
+        if (root == null) return res;
         foreach (XmlNode c in root.SelectNodes("quest"))
             res.Add(new Quest(
                 int.Parse(c.Attributes.GetNamedItem("id").Value),

@@ -27,6 +27,10 @@ public class MainPersonActionController : MonoBehaviour {
                         teleport tlp = actionItem.GetComponent<teleport>();
                         tlp.goToHouse(gameObject);
                         break;
+                    case "NPC":
+                        var nac = actionItem.GetComponent<NPCActionController>();
+                        nac.startDialog(actionItem.name);
+                        break;
                 }
             }
         }

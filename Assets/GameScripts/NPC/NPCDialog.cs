@@ -12,6 +12,9 @@ public class NPCDialog
     /// <summary>Текущая запись</summary>
     NPCEntry currentEntry = null;
 
+    /// <summary>Изменение дружелюбности в зависимости от номера выбранного ответа</summary>
+    List<int> prevFriendly = new List<int>();
+
     /// <summary> </summary>
     /// <param name="Root">Узел XML, содержащий записи диалога</param>
     public NPCDialog(XmlNode root)
@@ -37,7 +40,10 @@ public class NPCDialog
         if (node == null)
             node = root.SelectSingleNode("default");
 
+        if (currentEntry != null)
+            prevFriendly = currentEntry.currFriendly;
         currentEntry = new NPCEntry(node);
+        currentEntry.prevFriendly = new List<int>(prevFriendly);
         return currentEntry;
     }
 

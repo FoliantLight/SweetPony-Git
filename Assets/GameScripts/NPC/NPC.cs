@@ -66,7 +66,7 @@ public class NPC
     {
         var entry = dialog.getEntry(answerIndex);
         if (answerIndex != 0)
-            friendly += entry.friendly[answerIndex - 1];
+            friendly += entry.prevFriendly[answerIndex - 1];
         shownName = entry.name;
         return entry;
     }
