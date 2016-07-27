@@ -13,19 +13,24 @@ public class NPC
     static public string Path = "Assets/GameScripts/NPC/";
 
     /// <summary>Имя нипа. Определяет xml с диалогом и другие файлы для нипа, если понадобится</summary>
-    private string name;
+    public string name;
     /// <summary>Активные - дают квесты и учавствуют в диалогах. Пассивные - не дают заданий, не общаются.</summary>
-    public bool isActive = true;
+    bool isActive = true;
     /// <summary>Начальная позиция нипа. Его дом</summary>
     public Vector3 startPosition;
     /// <summary>Начальная позиция нипа случайна.Для нипов-путешественников, например.</summary>
-    public bool isRandomStartPosition = false;
+    bool isRandomStartPosition = false;
     /// <summary>Ночные нипы не возвращаются домой для сна</summary>
-    public bool isNight = true;
+    bool isNight = true;
     /// <summary>Диалог с НИПом</summary>
     NPCDialog dialog;
-    /// <summary>Квесты, которые НИП может принять</summary>
-    List<Quest> recived_quest = new List<Quest>();
+    /// <summary>Номера квестов, которые НИП может принять</summary>
+    List<int> recived_quest = new List<int>();
+
+    /// <summary>Уровень дружелюбности</summary>
+    public int friendly = 0;
+    /// <summary>Имя, которым НИП представился игроку</summary>
+    public string shownName = "";
         
 
 
@@ -47,26 +52,23 @@ public class NPC
             float.Parse(root.GetAttribute("y")),
             float.Parse(root.GetAttribute("z")));
 
-        recived_quest = Quest.parse(
+        recived_quest = Quest.parseIndexRecieved(
             root.GetElementsByTagName("recieved_quests").Item(0));
 
         dialog = new NPCDialog(
             root.GetElementsByTagName("dialog").Item(0));
     }
 
-    /// <summary>Получение первого вопроса</summary>
-    /// <returns>Диалоговая запись - вопрос, ответы, выдаваемые квесты и инвентарь</returns>
-    public NPCEntry start()
-    {
-        return dialog.getEntry();
-    }
-
     /// <summary>Получение следующего вопроса</summary>
-    /// <param name="answerIndex">Номер ответа на предыдущий вопрос. Счет с 1</param>
+    /// <param name="answerIndex">Номер ответа на предыдущий вопрос. Счет с 1. Получение первого вопроса - без параметра </param>
     /// <returns>Диалоговая запись - вопрос, ответы, выдаваемые квесты и инвентарь</returns>
-    public NPCEntry getEntry(int answerIndex)
+    public NPCEntry getEntry(int answerIndex = 0)
     {
-        return dialog.getEntry(answerIndex);
+        var entry = dialog.getEntry(answerIndex);
+        if (answerIndex != 0)
+            friendly += entry.friendly[answerIndex - 1];
+        shownName = entry.name;
+        return entry;
     }
 
     /// <summary>Сохранение класса в файле XML</summary>

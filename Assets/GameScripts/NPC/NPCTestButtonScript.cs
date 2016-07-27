@@ -25,10 +25,10 @@ using System.IO;
         {
             try
             {
-   
 
+                NPC.encode("Luna");
                 var npc = new NPC("Luna");
-                var e1 =  npc.start();
+                var e1 =  npc.getEntry();
                 var e2 = npc.getEntry(2);
                 var e3 = npc.getEntry(1);
             }
