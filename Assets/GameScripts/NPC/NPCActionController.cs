@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 public class NPCActionController : ActionItem {
     Transform canvas;
-    Transform text;
-    Transform dd;
+    Transform question;
     Transform nameText;
+    List<Transform> answs = new List<Transform>();
+
+    public static int MaxAnswCount = 4;
 
     NPC npc = null;
 
@@ -14,12 +16,14 @@ public class NPCActionController : ActionItem {
     public void Start()
     {
         canvas = transform.FindChild("Canvas");
-        text = canvas.transform.FindChild("Text");
-        dd = canvas.transform.FindChild("Dropdown");
-        nameText = canvas.transform.FindChild("NameText");
+        question = canvas.transform.FindChild("Question");
+        answs.Add(canvas.transform.FindChild("Button"));
+        for (int i = 1; i < MaxAnswCount; i++)
+            answs.Add(canvas.transform.FindChild("Button ("+i+")"));
+
+        nameText = canvas.transform.FindChild("Name");
 
         canvas.transform.position = new Vector3(0, -100, 0);
-        nameText.GetComponent<Text>().text = "";
     }
 
     /// <summary>Игрок подходит к НИПу</summary>
@@ -48,7 +52,7 @@ public class NPCActionController : ActionItem {
     public void startDialog(string name)
     {
         npc = new NPC(name);
-        canvas.transform.position = new Vector3(0, 0, 0);
+        canvas.transform.position = new Vector3(0, 1.35F, 0);
         showEntry(npc.getEntry());
     }
 
@@ -56,11 +60,10 @@ public class NPCActionController : ActionItem {
     /// <param name="entry">Диалоговая запись</param>
     void showEntry(NPCEntry entry)
     {
-        text.GetComponent<Text>().text = entry.question;
-        var ddlist = new List<Dropdown.OptionData>();
-        foreach (var s in entry.answers)
-            ddlist.Add(new Dropdown.OptionData(s));
-        dd.GetComponent<Dropdown>().options = ddlist;
+        question.GetComponent<Text>().text = entry.question;
+
+        for (int i = 0; i < (entry.answers.Count < MaxAnswCount ? entry.answers.Count : MaxAnswCount); i++)
+            answs[i].transform.FindChild("Text").GetComponent<Text>().text = entry.answers[i];
         if (entry.name != "")
             nameText.GetComponent<Text>().text = entry.name;
     }
@@ -69,6 +72,6 @@ public class NPCActionController : ActionItem {
     public void checkAnswer()
     {
         if (npc == null) return;
-        showEntry(npc.getEntry(dd.GetComponent<Dropdown>().value + 1));
+      //  showEntry(npc.getEntry(number));
     }
 }
