@@ -4,7 +4,7 @@
 		<quest>24</quest>
 	</recieved_quests>
 	<dialog>
-		<entry id="1" question="Вопрос 1 ?" animation="">
+		<entry id="1" question="Привет) Вопрос1?" animation="">
 			<answ friendly="+100">Ответ 1.1</answ>
 			<answ friendly="-10">Ответ 1.2</answ>
 		</entry>
@@ -24,9 +24,9 @@
 			<drag>
 				<item count="64">Какой-то инвентарь</item>
 			</drag>
-			<quest id="24">
+			<quest id="24" prestige="+1" minPrestige="0" maxPrestige="0">
 				<drag>
-					<item count="1">Лунные шестеренки</item>
+					<item count="64">Лунная шестеренка</item>
 				</drag>
 				<drop>
 					<item count="2">Тортик</item>

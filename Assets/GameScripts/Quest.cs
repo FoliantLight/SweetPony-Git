@@ -19,12 +19,19 @@ public class Quest
     /// <summary>Максимальное количество баллов престижа, которое может быть у игорока для получения этого квеста</summary>
     public int maxPrestige = 0;
 
+
     /// <summary>Создание квеста</summary>
+    /// <param name="prestige">Начисление/списание (в зависимости от знака) престижа у игорка за выполнение этого квеста</param>
+    /// <param name="minPrestige">Минимальное количество престижа у игрока, при котором он может взять этот квест</param>
+    /// <param name="maxPrestige">Максимальное количество престижа у игрока, при котором он может взять этот квест</param>
     /// <param name="id">Номер квеста. Идентификатор</param>
     /// <param name="revard">Награда - список наборов предметов</param>
-    public Quest(int id, List<ItemSet> drag, List<ItemSet> drop)
+    public Quest(int id, int prestige, int minPrestige, int maxPrestige, List<ItemSet> drag, List<ItemSet> drop)
     {
         this.id = id;
+        this.prestige = prestige;
+        this.minPrestige = minPrestige;
+        this.maxPrestige = maxPrestige;
         this.drag = new List<ItemSet>(drag);
         this.drop = new List<ItemSet>(drop);
     }
@@ -44,6 +51,9 @@ public class Quest
         foreach (XmlNode c in root.SelectNodes("quest"))
             res.Add(new Quest(
                 int.Parse(c.Attributes.GetNamedItem("id").Value),
+                int.Parse(c.Attributes.GetNamedItem("prestige").Value),
+                int.Parse(c.Attributes.GetNamedItem("minPrestige").Value),
+                int.Parse(c.Attributes.GetNamedItem("maxPrestige").Value),
                 ItemSet.parse(c.SelectSingleNode("drag")),
                 ItemSet.parse(c.SelectSingleNode("drop"))
                 ));
