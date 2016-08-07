@@ -5,21 +5,23 @@ using System.Text;
 using UnityEngine;
 
 
-class NPCController :ActionItem
+class NPCController : ActionItem
 {
     public string name = ""; 
-    void OnTriggerEnter2D(Collider2D other)
-    {
+    void OnTriggerEnter2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
-        mpac.isUseAroundEnter(transform.gameObject);
+        mpac.setActionItem(this);
         transform.GetComponent<SpriteRenderer>().color = Color.gray;
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
+    void OnTriggerExit2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
-        mpac.isUseAroundExit();
+        mpac.unsetActionItem();
         transform.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    public override void triggerAction() {
+        
     }
 }
 

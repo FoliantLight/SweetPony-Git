@@ -2,26 +2,27 @@
 using System.Collections;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class ActionItem : MonoBehaviour {
+public abstract class ActionItem : MonoBehaviour {
 
     private BoxCollider2D boxCollider;
+    protected MainPerson m_mainPersonScript;
+
     // Use this for initialization
-    void Start () {
+    protected virtual void Start () {
         boxCollider = GetComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
+        m_mainPersonScript = MainPerson.getMainPersonScript();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
+    void OnTriggerEnter2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
-        mpac.isUseAroundEnter(transform.gameObject);
-        transform.GetComponent<SpriteRenderer>().color = Color.gray;
+        mpac.setActionItem(this);
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
+    void OnTriggerExit2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
-        mpac.isUseAroundExit();
-        transform.GetComponent<SpriteRenderer>().color = Color.white;
+        mpac.unsetActionItem();
     }
+
+    public abstract void triggerAction();
 }

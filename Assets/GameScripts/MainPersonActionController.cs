@@ -3,46 +3,22 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class MainPersonActionController : MonoBehaviour {
 
-    private GameObject actionItem;
-    public GameObject hint;
-    private float changeScale;
+    private ActionItem actionItem;
 	
 	// Update is called once per frame
-	void Update () {
-	    if (actionItem != null)
-        {
-            hint.SetActive(true);
-            float h = CrossPlatformInputManager.GetAxis("Horizontal");
-            if (h > 0)
-                changeScale = 1;
-            else
-                if (h < 0)
-                changeScale = -1;
-            hint.transform.localScale = new Vector3(changeScale * -1.5f, 1.5f, 1.5f);
-            if (CrossPlatformInputManager.GetButtonDown("Use"))
-            {
-                switch(actionItem.tag)
-                {
-                    case "door":
-                        teleport tlp = actionItem.GetComponent<teleport>();
-                        tlp.goToHouse(gameObject);
-                        break;
-                }
+	void FixedUpdate () {
+        if(actionItem != null) {
+            if (CrossPlatformInputManager.GetButtonDown(Buttons.Use)) {
+                actionItem.triggerAction();
             }
-        }
-        else
-        {
-            hint.SetActive(false);
         }
 	}
 
-    public void isUseAroundEnter(GameObject go)
-    {
-        actionItem = go;
+    public void setActionItem(ActionItem item) {
+        actionItem = item;
     }
 
-    public void isUseAroundExit()
-    {
+    public void unsetActionItem() {
         actionItem = null;
     }
 }

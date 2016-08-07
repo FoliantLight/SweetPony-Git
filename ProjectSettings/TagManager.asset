@@ -18,10 +18,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Solid
+  - Platforms
+  - Triggers
   - 
   - 
   - 
@@ -45,4 +45,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3982534983
+    locked: 0
+  - name: OtherEnvironment
+    uniqueID: 2004194371
+    locked: 0
+  - name: InsideHouse
+    uniqueID: 1735609059
+    locked: 0
+  - name: FrontHouse
+    uniqueID: 2983591891
+    locked: 0
+  - name: Characters
+    uniqueID: 2347072915
+    locked: 0
+  - name: Foreground
+    uniqueID: 1794661677
     locked: 0

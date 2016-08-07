@@ -3,125 +3,92 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class MainPerson : MonoBehaviour {
-    [SerializeField] private float playerSpeed = 2;//Скорость игрока
-    [SerializeField] private float jumpForce = 500;//Сила прыжка
-    private float runSpeed = 2;//Скорость бега *****Константа*****
-    private float v;//вертикальная ось (W,S or arrow down,arrow up)
-    private float h;//вертикальная ось (A,D or arrow left,arrow right)
-    private bool isRight = true;//Переключатель для настроки направления спрайта
-    [SerializeField] private LayerMask m_WhatIsGround;//Что считается землей для функции checkGround()
+    private float v = 0;//вертикальная ось (W,S or arrow down,arrow up)
+    private float h = 0;//горизонтальная ось (A,D or arrow left,arrow right)
 
-    private Transform m_GroundCheck;//Объект проверки столкновения с землей для функции checkGround()
     private Rigidbody2D m_Rigidbody2D;
-    //private Transform m_CeilingCheck;//Объект проверки столкновения башки с потолком или другой хренью сверху для функции checkGround()
     private Animator m_Anim;//Аниматор
+    private SpriteRenderer m_spriteRenderer;
+    private BoxCollider2D m_boxCollider;
 
-    private DateTime lastTrample;
-    private int secToTrample;
-    private System.Random rndSec = new System.Random();
+    private System.Random rnd = new System.Random();
+    private int m_averageFramesToTrample;
 
-    private void Awake()
-    {
-        m_GroundCheck = transform.Find("GroundCheck");
-        //m_CeilingCheck = transform.Find("CeilingCheck");//Пока совсем ненужная переменная
+    private void Awake() {
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        m_boxCollider = GetComponent<BoxCollider2D>();
     }
 
     void Start () {
-        lastTrample = DateTime.Now;
-        secToTrample = rndSec.Next(5, 15);
+        //Среднее количество кадров между анимацией топтания на месте
+        m_averageFramesToTrample = 500;
 	}
 	
 	void Update () {
         #region Поворот спрайта в направлении движения. Основное направление влево
-        float tempScaleX = transform.localScale.x;
-        if (h != 0)
-        {            
-            if (h > 0)
-            {
-                if (isRight)
-                {
-                    if (tempScaleX > 0)
-                    {
-                        tempScaleX = -tempScaleX;
-                    }
-                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                    isRight = false;
-                }
-            }
-            else
-            {
-                if (!isRight)
-                {
-                    if (tempScaleX < 0)
-                    {
-                        tempScaleX = -tempScaleX;
-                    }
-                    transform.localScale = new Vector3(tempScaleX, transform.localScale.y);
-                    isRight = true;
-                }
-            }           
+        if(h > 0) {
+            m_spriteRenderer.flipX = true;
         }
-        #endregion
-        #region топтание на месте. Время в рандоме от 30 до 60 секунд
-        if ((DateTime.Now - lastTrample).TotalSeconds > secToTrample)
-        {
-            if (m_Anim.GetFloat("hSpeed") == 0)
-            {
-                m_Anim.SetTrigger("Trample");
-                lastTrample = DateTime.Now;
-                secToTrample = rndSec.Next(5, 15);
-            }
-            else
-            {
-                lastTrample = DateTime.Now;
-            }
+        else if(h < 0) {
+            m_spriteRenderer.flipX = false;
         }
         #endregion
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         #region основа движения
-        v = CrossPlatformInputManager.GetAxis("Vertical");
-        h = CrossPlatformInputManager.GetAxis("Horizontal");
+        v = CrossPlatformInputManager.GetAxis(Axes.Vertical);
+        h = CrossPlatformInputManager.GetAxis(Axes.Horizontal);
 
         m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
         m_Anim.SetBool("Grounded", checkGround());
         #endregion
         #region Прыжок
-        if (checkGround())
-        {
-            if (CrossPlatformInputManager.GetButtonDown("Jump"))
-            {
-                m_Rigidbody2D.AddForce(new Vector2(0, jumpForce));
+        if (checkGround()) {
+            if (CrossPlatformInputManager.GetButtonDown(Buttons.Jump)) {
+                m_Rigidbody2D.AddForce(new Vector2(0, GameConsts.JumpForce));
                 m_Anim.SetBool("Grounded", false);
-                m_Anim.SetBool("jmp", true);
+                m_Anim.SetTrigger("Jmp");
             }
-
         }
-
         #endregion
+
         #region Движение
-        if (CrossPlatformInputManager.GetButton("Run"))
-        {
-            h *= runSpeed;
+        float hSpeed = h * GameConsts.PlayerSpeed;
+        if (CrossPlatformInputManager.GetButton(Buttons.Run)) {
+            hSpeed *= GameConsts.RunSpeedMultiplier;
         }
-        m_Anim.SetFloat("hSpeed", h);
-        transform.position += new Vector3(playerSpeed * Time.fixedDeltaTime * h, 0);
+        m_Anim.SetFloat("hSpeed", hSpeed);
+        transform.position += new Vector3(Time.fixedDeltaTime * hSpeed, 0);
+        #endregion
+
+        #region рандомное топтание на месте.
+        if(h == 0 && checkGround() && rnd.Next(m_averageFramesToTrample) == 0) {
+            m_Anim.SetTrigger("Trample");
+        }
         #endregion
     }
 
-    bool checkGround()
-    {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, 0.1f, m_WhatIsGround);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i].gameObject != gameObject)
-                return true;    
+    bool checkGround() {
+        #region Вычисление середины нижней стороны коллидера
+        float downPointX = transform.position.x + m_boxCollider.offset.x;
+        float downPointY = transform.position.y + m_boxCollider.offset.y - m_boxCollider.size.y / 2;
+        Vector2 downPoint = new Vector2(downPointX, downPointY);
+        #endregion
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(downPoint, 0.1F);
+        for (int i = 0; i < colliders.Length; i++) {
+            int layer = colliders[i].gameObject.layer;
+            if(layer == Layers.Solid || layer == Layers.Platforms) {
+                return true;
+            }  
         }
         return false;
     }
 
+    public static MainPerson getMainPersonScript() {
+        return GameObject.FindGameObjectWithTag(Tags.Player).GetComponent<MainPerson>();
+    }
 }

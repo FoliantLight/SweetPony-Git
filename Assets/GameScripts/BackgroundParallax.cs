@@ -1,61 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityStandardAssets.CrossPlatformInput;
 
-// @NOTE the attached sprite's position should be "top left" or the children will not align properly
-// Strech out the image as you need in the sprite render, the following script will auto-correct it when rendered in the game
-[RequireComponent(typeof(SpriteRenderer))]
-
-// Generates a nice set of repeated sprites inside a streched sprite renderer
-// @NOTE Vertical only, you can easily expand this to horizontal with a little tweaking
 public class BackgroundParallax : MonoBehaviour
 {
-    SpriteRenderer sprite;
+    public List<Material> m_materials;
+    public List<float> m_selfSpeeds;
+    public GameObject m_backgroundQuad;
 
-    private float depth = 1;
-    private float v;
-    private float h;
+    private List<GameObject> m_backgroundQuads;
 
-    void Awake()
-    {
+    Vector3 lastPos;
 
-        // Get the current sprite with an unscaled size
-        sprite = GetComponent<SpriteRenderer>();
-        Vector2 spriteSize = new Vector2(sprite.bounds.size.x, sprite.bounds.size.y);
-        transform.position += new Vector3(spriteSize.x * 3, 0);
-
-        // Generate a child prefab of the sprite renderer
-        GameObject childPrefab = new GameObject();
-        SpriteRenderer childSprite = childPrefab.AddComponent<SpriteRenderer>();
-        childPrefab.transform.position = transform.position;
-        childSprite.sprite = sprite.sprite;
-        childPrefab.transform.localScale = transform.localScale;
-
-        // Loop through and spit out repeated tiles
-        GameObject child;
-        for (int i = 1; i < 7; i++)
-        {
-            child = Instantiate(childPrefab) as GameObject;
-            child.transform.position = transform.position - (new Vector3(spriteSize.x, 0, 0) * i);
-            child.transform.parent = transform;
+    void Start() {
+        m_backgroundQuads = new List<GameObject>(m_materials.Count);
+        for(int i = 0; i < m_materials.Count; i++) {
+            Vector3 position = new Vector3(transform.position.x, transform.position.y, i + 1);
+            GameObject quad = Instantiate(m_backgroundQuad, position, transform.rotation) as GameObject;
+            quad.transform.SetParent(this.transform);
+            m_backgroundQuads.Add(quad);
+            m_backgroundQuads[i].GetComponent<Renderer>().material = m_materials[i];
         }
 
-        // Set the parent last on the prefab to prevent transform displacement
-        childPrefab.transform.parent = transform;
-
-        // Disable the currently existing sprite component since its now a repeated image
-        sprite.enabled = false;
+        lastPos = transform.position;
     }
 
-    void Start()
-    {
-        depth = transform.localPosition.z;        
-    }
+    void Update() {
+        Vector3 cameraOffset = transform.position - lastPos;
+        for(int i = 0; i < m_backgroundQuads.Count; i++) {
+            Material mat = m_backgroundQuads[i].GetComponent<Renderer>().material;
+            //150 и 10 отвечают за скорость параллакса. Чем больше число, тем медленнее перемещается фон.
+            float textureOffsetX = mat.GetTextureOffset("_MainTex").x;
+            float offsetX = (cameraOffset.x + m_selfSpeeds[i]) / (150 * (i + 1));
+            float offsetY = cameraOffset.y / (10 * (i + 1));
+            mat.SetTextureOffset("_MainTex", new Vector2(textureOffsetX + offsetX, 0.0F));
+            m_backgroundQuads[i].transform.position += new Vector3(0.0F, -offsetY, 0.0F); 
+        }
 
-    void Update()
-    {
-        v = CrossPlatformInputManager.GetAxis("Vertical");
-        h = CrossPlatformInputManager.GetAxis("Horizontal");
-        transform.position += new Vector3((7 - depth) * Time.fixedDeltaTime * -h * 0.1f, 0);
+        lastPos = transform.position;
     }
 }
