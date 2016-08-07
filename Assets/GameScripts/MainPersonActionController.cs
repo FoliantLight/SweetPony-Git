@@ -8,7 +8,7 @@ public class MainPersonActionController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         if(actionItem != null) {
-            if (CrossPlatformInputManager.GetButtonDown(Buttons.Use)) {
+            if(CrossPlatformInputManager.GetButtonDown(Buttons.Use)) {
                 actionItem.triggerAction();
             }
         }

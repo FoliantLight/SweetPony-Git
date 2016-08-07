@@ -21,8 +21,10 @@ public abstract class ActionItem : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
+        exitAction();
         mpac.unsetActionItem();
     }
 
     public abstract void triggerAction();
+    public abstract void exitAction();
 }

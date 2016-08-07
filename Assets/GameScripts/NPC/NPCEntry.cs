@@ -22,29 +22,44 @@ public class NPCEntry
     /// <summary>Список квестов, полученных в этой записи</summary>
     public List<Quest> quest = new List<Quest>();
 
-    /// <summary>Список наборов предметов, полученных в этой записи</summary>
-    public List<ItemSet> items = new List<ItemSet>();
+    /// <summary>Список полученных наборов предметов</summary>
+    public List<ItemSet> drag = new List<ItemSet>();
+
+    /// <summary>Список потерянных наборов предметов</summary>
+    public List<ItemSet> drop = new List<ItemSet>();
 
     /// <summary>Список возможных ответов</summary>
     public List<string> answers = new List<string>();
 
-    /// <summary>Список изменения дружелюбности для разных ответов</summary>
-    public List<int> friendly = new List<int>();
+    /// <summary>Список изменения дружелюбности для предыдущих ответов</summary>
+    public List<int> currFriendly = new List<int>();
+    public List<int> prevFriendly;
+
+
+    /// <summary>Имя, которым себя назвал НИП. Если пустое - значит еще не назвал</summary>
+    public string name = "";
 
     /// <summary>Диалоговая запись - вопрос и ответы из узла XML</summary>
     /// <param name="xml"></param>
     public NPCEntry(XmlNode xml)
     {
         question = xml.Attributes.GetNamedItem("question").Value;
-        number = xml.Attributes.GetNamedItem("id").Value;
+        if (xml.Name != "default")
+            number = xml.Attributes.GetNamedItem("id").Value;
         animation = xml.Attributes.GetNamedItem("animation").Value;
         foreach (XmlNode ch in xml.SelectNodes("answ"))
         {
-            friendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
+            currFriendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
             answers.Add(ch.InnerText);
         }
         isFinish = (answers.Count == 0);
-        items = ItemSet.parse(xml);
+
+        drag = ItemSet.parse(xml.SelectSingleNode("drag"));
+        drag = ItemSet.parse(xml.SelectSingleNode("drop"));
+
+        if (xml.SelectSingleNode("name") != null)
+            name = xml.SelectSingleNode("name").InnerText;
+
         quest = Quest.parse(xml);
     }   
 }

@@ -45,4 +45,8 @@ public class DoorAction : ActionItem {
             inHouse = true;
         }
     }
+
+    public override void exitAction() {
+        
+    }
 }

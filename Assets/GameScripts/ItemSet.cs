@@ -26,6 +26,7 @@ public class ItemSet
     public static List<ItemSet> parse(XmlNode root)
     {
         var res = new List<ItemSet>();
+        if (root == null) return res;
         foreach (XmlNode c in root.SelectNodes("item"))
             res.Add(new ItemSet(
                 c.InnerText,

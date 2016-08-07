@@ -9,12 +9,11 @@ public class NPCDialog
 {
     /// <summary>Узел XML, содержащий записи диалога</summary>
     XmlNode root;
-
     /// <summary>Текущая запись</summary>
     NPCEntry currentEntry = null;
 
-    /// <summary>Уровень дружелюбности</summary>
-    int friendly = 0;
+    /// <summary>Изменение дружелюбности в зависимости от номера выбранного ответа</summary>
+    List<int> prevFriendly = new List<int>();
 
     /// <summary> </summary>
     /// <param name="Root">Узел XML, содержащий записи диалога</param>
@@ -24,15 +23,14 @@ public class NPCDialog
     }
 
     /// <summary>Получение нового вопроса после выбора одного из ответов</summary>
-    /// <param name="answerIndex">Номер ответа на вопрос. Счет с 1. Получение первого вопроса - без параметра </param>
+    /// <param name="answerIndex">Номер ответа на вопрос. Счет с 1</param>
     /// <returns></returns>
-    public NPCEntry getEntry(int answerIndex = 0)
+    public NPCEntry getEntry(int answerIndex)
     {
         XmlNode node;
         if (currentEntry == null) // первый вопрос
             node = root.SelectSingleNode("entry[@id='1']");
         else { 
-            friendly += currentEntry.friendly[answerIndex-1];
             node = root.SelectSingleNode("entry[@id='" + 
                 currentEntry.number + "." + answerIndex + "']");
         }
@@ -42,7 +40,10 @@ public class NPCDialog
         if (node == null)
             node = root.SelectSingleNode("default");
 
+        if (currentEntry != null)
+            prevFriendly = currentEntry.currFriendly;
         currentEntry = new NPCEntry(node);
+        currentEntry.prevFriendly = new List<int>(prevFriendly);
         return currentEntry;
     }
 
