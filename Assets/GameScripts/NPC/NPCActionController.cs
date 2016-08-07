@@ -11,8 +11,9 @@ public class NPCActionController : ActionItem {
 
     NPC npc = null;
     /// <summary>Получение ссылок на объекты диалогового окна внутри объекта НИПа</summary>
-    public void Start()
-    {
+    protected override void Start () {
+        base.Start();
+
         canvas = transform.FindChild("Canvas");
         question = canvas.FindChild("Question").FindChild("Text").GetComponent<Text>();
         #region Всем созданным кнопкам добавляется обработчик нажатия
