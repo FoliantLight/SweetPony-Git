@@ -10,7 +10,6 @@ public class ObjectDestroyer : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("#*(@&#*(@");
         m_spawnScript.destroyObject(other.gameObject);
     }
 }

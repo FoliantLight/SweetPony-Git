@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class ActionItem : MonoBehaviour {
@@ -16,15 +17,28 @@ public abstract class ActionItem : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
+        if(mpac == null) {
+            return;
+        }
         mpac.setActionItem(this);
     }
 
     void OnTriggerExit2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
+        if(mpac == null) {
+            return;
+        }
+
         exitAction();
         mpac.unsetActionItem();
     }
 
+    public virtual bool actionCondition() {
+        return CrossPlatformInputManager.GetButtonDown(Buttons.Use);
+    }
+
     public abstract void triggerAction();
-    public abstract void exitAction();
+
+    public virtual void exitAction() {        
+    }
 }

@@ -133,10 +133,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 5e7a64c5d22906140af9891965a18c4a, type: 2}
   m_selfSpeeds:
   - 0
-  - -0.1
+  - -0.01
+  - 0.002
   - 0
-  - 0
-  - 0
+  - 0.002
   - 0
   - 0
   - 0

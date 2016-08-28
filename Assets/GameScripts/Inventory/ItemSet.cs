@@ -3,28 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using UnityEngine;
 
 /// <summary> Набор нескольких предметов одного типа </summary>
-public class ItemSet
-{
+[System.Serializable]
+public class ItemSet {
     /// <summary>Количство предметов данного типа</summary>
-    public int count;
+    [SerializeField]
+    private int m_count;
     /// <summary>Тип предмета</summary>
-    public string name;
+    [SerializeField]
+    private string m_name;
+
+    public int count {
+        get { return m_count; }
+        set { m_count = value; }
+    }
+
+    public string name {
+        get { return m_name; }
+        set { m_name = value; }
+    }
+
     /// <summary>Создание набора предметов одного типа</summary>
     /// <param name="name">Тип предмета</param>
     /// <param name="count">Количество экземпляров этого предмета</param>
-    public ItemSet(string name, int count)
-    {
-        this.name = name;
-        this.count = count;
+    public ItemSet(string name, int count) {
+        m_name = name;
+        m_count = count;
     }
 
     /// <summary>Парсер списка объектов ItemSet из узла Xml</summary>
     /// <param name="root">узел, содержащий список предметов</param>
     /// <returns>Список предметов</returns>
-    public static List<ItemSet> parse(XmlNode root)
-    {
+    public static List<ItemSet> parse(XmlNode root) {
         var res = new List<ItemSet>();
         if (root == null) return res;
         foreach (XmlNode c in root.SelectNodes("item"))
@@ -35,13 +47,15 @@ public class ItemSet
         return res;
     }
 
-    public override bool Equals(object obj)
-    {
+    public override bool Equals(object obj) {
         if (obj == null || GetType() != obj.GetType())
             return false;
         ItemSet p = (ItemSet)obj;
-        return (name.Equals(p.name)) && (count == p.count);
+        return (m_name.Equals(p.m_name)) && (m_count == p.m_count);
     }
-    public override int GetHashCode() { return name.GetHashCode() * count; }
+
+    public override int GetHashCode() {
+        return m_name.GetHashCode() * m_count;
+    }
 }
 

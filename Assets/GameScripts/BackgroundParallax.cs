@@ -32,7 +32,7 @@ public class BackgroundParallax : MonoBehaviour
             Material mat = m_backgroundQuads[i].GetComponent<Renderer>().material;
             //150 и 10 отвечают за скорость параллакса. Чем больше число, тем медленнее перемещается фон.
             float textureOffsetX = mat.GetTextureOffset("_MainTex").x;
-            float offsetX = (cameraOffset.x + m_selfSpeeds[i]) / (150 * (i + 1));
+            float offsetX = m_selfSpeeds[i] / 1000.0F + cameraOffset.x / (150 * (i + 1));
             float offsetY = cameraOffset.y / (10 * (i + 1));
             mat.SetTextureOffset("_MainTex", new Vector2(textureOffsetX + offsetX, 0.0F));
             m_backgroundQuads[i].transform.position += new Vector3(0.0F, -offsetY, 0.0F); 

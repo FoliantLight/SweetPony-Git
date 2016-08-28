@@ -32,7 +32,6 @@ public class SpawnScript : MonoBehaviour {
     }
 
     public void destroyObject(GameObject obj) {
-        Debug.Log("O_O_O_");
         if(m_spawnedObjects.Contains(obj)) {
             Destroy(obj);
         }

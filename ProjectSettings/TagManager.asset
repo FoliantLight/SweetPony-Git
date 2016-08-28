@@ -22,7 +22,7 @@ TagManager:
   - Solid
   - Platforms
   - Triggers
-  - 
+  - Items
   - 
   - 
   - 
@@ -60,6 +60,12 @@ TagManager:
     locked: 0
   - name: Characters
     uniqueID: 2347072915
+    locked: 0
+  - name: Items
+    uniqueID: 4131226447
+    locked: 0
+  - name: Player
+    uniqueID: 2758817587
     locked: 0
   - name: Foreground
     uniqueID: 1794661677

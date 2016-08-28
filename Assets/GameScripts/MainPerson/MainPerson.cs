@@ -12,7 +12,17 @@ public class MainPerson : MonoBehaviour {
     private SpriteRenderer m_spriteRenderer;
     private BoxCollider2D m_boxCollider;
 
+    /// <summary>Инвентарь</summary>
+    private Inventory m_playerInventory;
+
+    public Inventory inventory {
+        get { return m_playerInventory; }
+    }
+
+    private GameObject m_inventoryCanvas;
+
     private System.Random rnd = new System.Random();
+    /// <summary>Среднее количество кадров между анимацией топтания на месте</summary>
     private int m_averageFramesToTrample;
 
     /// <summary>Престиж (дружелюбность)</summary>
@@ -24,10 +34,7 @@ public class MainPerson : MonoBehaviour {
     /// <summary>Полученные, но еще не выполненные квесты</summary>
     public List<Quest> recievedQuests = new List<Quest>();
 
-    /// <summary>Инвентарь</summary>
-    public Inventory inventory = new Inventory();
-
-    /// <summary>Список встреченных НИПов, имена которыхх известны игроку</summary>
+    /// <summary>Список встреченных НИПов, имена которых известны игроку</summary>
     public List<string> metNames = new List<string>();
 
     private void Awake() {
@@ -38,11 +45,25 @@ public class MainPerson : MonoBehaviour {
     }
 
     void Start () {
-        //Среднее количество кадров между анимацией топтания на месте
         m_averageFramesToTrample = 500;
+
+        m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
+        if(m_inventoryCanvas == null) {
+            Debug.Log("На сцене нет объекта InventoryCanvas");
+        }
+
+        InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.PlayerInventory).GetComponent<InventoryPanel>();
+        m_playerInventory = new Inventory(GameConsts.inventorySize, false);
+        m_playerInventory.inventoryPanel = panel;
+
+        m_inventoryCanvas.SetActive(false);
 	}
 	
 	void Update () {
+        if(CrossPlatformInputManager.GetButtonDown(Buttons.Inventory)) {
+            m_inventoryCanvas.SetActive(!m_inventoryCanvas.activeSelf);
+        }
+
         #region Поворот спрайта в направлении движения. Основное направление влево
         if(h > 0) {
             m_spriteRenderer.flipX = true;
