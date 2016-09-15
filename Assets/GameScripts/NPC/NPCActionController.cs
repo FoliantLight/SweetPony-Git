@@ -9,6 +9,13 @@ public class NPCActionController : ActionItem {
     Text nameText;
     List<Transform> buttons = new List<Transform>();
 
+	private GameObject m_inventoryCanvas;
+
+	[SerializeField]
+	private List<ItemSet> items;
+
+	private Inventory m_inventory;
+
     NPC npc = null;
     /// <summary>Получение ссылок на объекты диалогового окна внутри объекта НИПа</summary>
     protected override void Start () {
@@ -31,6 +38,15 @@ public class NPCActionController : ActionItem {
         #endregion
         nameText = canvas.FindChild("Name").FindChild("Text").GetComponent<Text>();
         canvas.GetComponent<Canvas>().enabled = false;
+
+		#region инвентарь
+		m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
+		m_inventory = new Inventory(GameConsts.inventorySize, false);
+		m_inventory.addItems(items);
+
+		//InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
+		//m_inventory.inventoryPanel = panel;
+		#endregion
     }
 
     /// <summary>Пояление диалогового окна</summary>
@@ -52,9 +68,16 @@ public class NPCActionController : ActionItem {
         showEntry(npc.getEntry());
     }
 
+	/// <summary>При удалении игрока от НИПа все незабранные предметы исчезают и окна закрываются</summary>
     public override void exitAction() {
         canvas.GetComponent<Canvas>().enabled = false;
-    }
+	//	if (m_inventoryCanvas != null) 
+	//		m_inventoryCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(false);
+	//	if (m_inventory != null) {
+	//		m_inventory.inventoryPanel = null;
+	//		m_inventory.items.Clear (); 
+	//	}
+	}
 
     /// <summary>Прячет кнопку с ответом</summary>
     /// <param name="buttonObject">Объект кнопки с ответом</param>
@@ -92,6 +115,19 @@ public class NPCActionController : ActionItem {
             for (int i = entry.answers.Count; i < buttons.Count; hideButton(buttons[i++])) ;
         }
         #endregion
+
+		#region drag&drop
+		Debug.Log("drag " + entry.drag.Count.ToString() + ". drop " + entry.drop.Count.ToString());
+		if (entry.drag.Count > 0)
+		{
+
+			m_inventoryCanvas.SetActive(true);
+			m_inventoryCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(true);
+			m_inventory.addItems(entry.drag);	
+			Debug.Log(entry.drag[0].name);
+		}
+		//MainPerson.getMainPersonScript().drop(entry.drop);
+		#endregion
 
         for (int i = 0; i < answersCount; i++)
         {

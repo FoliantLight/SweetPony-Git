@@ -103,11 +103,7 @@ public class Inventory {
             }
         }
     }
-
-    public void removeItem(Vector2Int pos) {
-        setOccupiedCells(pos, m_items[pos].size, false);
-        m_items.Remove(pos);
-    }
+		
 
     public bool checkPosition(Vector2Int pos, Vector2Int size) {
         if(pos.row + size.row > m_size.row) {
@@ -133,4 +129,67 @@ public class Inventory {
             }
         }
     }
+
+	/// <summary>Удаляет предмет по его позиции</summary>
+    public void removeItem(Vector2Int pos) {
+        setOccupiedCells(pos, m_items[pos].size, false);
+        m_items.Remove(pos);
+    }
+
+	/// <summary>Удаляет предмет по его названию</summary>
+	/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
+	public bool removeItem(InventoryItemInfo info) {
+		{
+			if (m_items.GetEnumerator ().Current.Value.Equals (info)) {
+				removeItem (m_items.GetEnumerator ().Current.Key);
+				return true;
+			}
+		} while (m_items.GetEnumerator ().MoveNext());
+		return false;
+	}
+
+	/// <summary>Удаляет все, что может удалить из списка предметов</summary>
+	public void removeItem(ItemSet it) {
+			for(int j = 0; j < it.count; j++) 
+				removeItem (InventoryItemDictionary.getInstance.getItem (it.name));
+	}
+
+	/// <summary>Удаляет набор одинаковых предметов. Удаление как транзакция</summary>
+	/// <returns><c>true</c>, если может удалить все предметы <c>false</c> если не может удалить хотя бы один</returns>
+	public bool removeItemTransaction(ItemSet it) {
+		if (!have (it))
+			return false;
+		for(int j = 0; j < it.count; j++) {
+			removeItem (InventoryItemDictionary.getInstance.getItem (it.name));
+		}
+		return true;
+	}
+
+
+	/// <summary>Проверка наличия по названию предмета</summary>
+	/// <returns><c>true</c>, если есть хоть один такой предмет <c>false</c> если нет</returns>	
+	public bool have(InventoryItemInfo info) {
+		{
+			if (m_items.GetEnumerator ().Current.Value.Equals (info)) {
+				return true;
+			}
+		} while (m_items.GetEnumerator ().MoveNext());
+		return false;
+	}
+
+	/// <summary>Проверка наличия</summary>
+	/// <returns><c>true</c>, если все предметы есть в инвентаре <c>false</c> если нет хотя бы одного</returns>
+	public bool have(ItemSet it)
+	{
+		int cnt = 0;
+		InventoryItemInfo info = InventoryItemDictionary.getInstance.getItem (it.name);
+		{
+			if (m_items.GetEnumerator ().Current.Value.Equals (info)) {
+				cnt++;
+				if (cnt >= it.count)
+					return true;
+			}
+		} while (m_items.GetEnumerator ().MoveNext());
+		return false;
+	}
 }

@@ -40,6 +40,14 @@ public class NPCDialog
         if (node == null)
             node = root.SelectSingleNode("default");
 
+		// если запись содержит ссылку на другую запись
+		string gotoNumber = "";
+		try {
+			gotoNumber = node.Attributes.GetNamedItem("goto").Value;
+		} catch (Exception ex) {;}
+		if (gotoNumber != "")
+			node = root.SelectSingleNode("entry[@id='" + gotoNumber + "']");
+
         if (currentEntry != null)
             prevFriendly = currentEntry.currFriendly;
         currentEntry = new NPCEntry(node);

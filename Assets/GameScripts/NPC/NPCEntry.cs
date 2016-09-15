@@ -55,7 +55,7 @@ public class NPCEntry
         isFinish = (answers.Count == 0);
 
         drag = ItemSet.parse(xml.SelectSingleNode("drag"));
-        drag = ItemSet.parse(xml.SelectSingleNode("drop"));
+        drop = ItemSet.parse(xml.SelectSingleNode("drop"));
 
         if (xml.SelectSingleNode("name") != null)
             name = xml.SelectSingleNode("name").InnerText;

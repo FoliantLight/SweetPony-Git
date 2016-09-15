@@ -128,4 +128,21 @@ public class MainPerson : MonoBehaviour {
     public static MainPerson getMainPersonScript() {
         return GameObject.FindGameObjectWithTag(Tags.Player).GetComponent<MainPerson>();
     }
+
+	/// <summary>Удаляет все предметы из инвентаря без проверки их наличия в инвентаре</summary>
+	public void drop(List<ItemSet> it)
+	{
+		for (int i = 0; i < it.Count; i++) 
+			m_playerInventory.removeItem(it[i]);
+	}
+		
+	/// <summary>Проверяет наличие ВСЕХ предметов в инвентаре</summary>
+	public bool haveInInventory(List<ItemSet> it)
+	{
+		bool res = true;
+		for (int i = 0; i < it.Count; i++)
+			if (!m_playerInventory.have (it [i]))
+				res = false;
+		return res;
+	}
 }

@@ -10,7 +10,7 @@ using System.IO;
 public class NPC
 {
     /// <summary>Путь для папки с xml.</summary>
-    static public string Path = "Assets/GameScripts/NPC/";
+    static public string Path = "Assets/NPCs/";
 
     /// <summary>Имя нипа. Определяет xml с диалогом и другие файлы для нипа, если понадобится</summary>
     public string name;
