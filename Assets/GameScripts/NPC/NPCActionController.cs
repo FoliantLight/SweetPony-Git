@@ -8,12 +8,11 @@ public class NPCActionController : ActionItem {
     Text question;
     Text nameText;
     List<Transform> buttons = new List<Transform>();
+	public Sprite face = null;
 
 	private GameObject m_inventoryCanvas;
-
 	[SerializeField]
 	private List<ItemSet> items;
-
 	private Inventory m_inventory;
 
     NPC npc = null;
@@ -21,7 +20,7 @@ public class NPCActionController : ActionItem {
     protected override void Start () {
         base.Start();
 
-        canvas = transform.FindChild("Canvas");
+        canvas = transform.FindChild("NPCDialog");
         question = canvas.FindChild("Question").FindChild("Text").GetComponent<Text>();
         #region Всем созданным кнопкам добавляется обработчик нажатия
         int i = 0;
@@ -41,11 +40,13 @@ public class NPCActionController : ActionItem {
 
 		#region инвентарь
 		m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
+		if (m_inventoryCanvas == null)
+			Debug.Log("inv canvas is null");
 		m_inventory = new Inventory(GameConsts.inventorySize, false);
 		m_inventory.addItems(items);
 
-		//InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
-		//m_inventory.inventoryPanel = panel;
+		InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
+		m_inventory.inventoryPanel = panel;
 		#endregion
     }
 
@@ -62,7 +63,7 @@ public class NPCActionController : ActionItem {
             
         npc = new NPC(name);
 
-        // TODO: canvas.FindChild("Circle").GetComponent<SpriteRender>().sprite = name + "_face.png";
+		canvas.FindChild ("Circle").GetComponent<Image> ().sprite = face;
         nameText.text = "";
         canvas.GetComponent<Canvas>().enabled = true;
         showEntry(npc.getEntry());
@@ -100,7 +101,7 @@ public class NPCActionController : ActionItem {
     /// <param name="entry">Диалоговая запись</param>
     void showEntry(NPCEntry entry)
     {
-        Debug.Log("Номер записи " + entry.number);
+        //Debug.Log("Номер записи " + entry.number);
         question.text = entry.question;
         #region Появляются/скрываются лишние кнопки
         int answersCount;
@@ -120,7 +121,6 @@ public class NPCActionController : ActionItem {
 		Debug.Log("drag " + entry.drag.Count.ToString() + ". drop " + entry.drop.Count.ToString());
 		if (entry.drag.Count > 0)
 		{
-
 			m_inventoryCanvas.SetActive(true);
 			m_inventoryCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(true);
 			m_inventory.addItems(entry.drag);	
@@ -147,7 +147,7 @@ public class NPCActionController : ActionItem {
     public void checkAnswer(int answerNumber)
     {
         if (npc == null) return;
-        Debug.Log("Функция checkAnswer получила номер кнопки " + answerNumber);
+        //Debug.Log("Функция checkAnswer получила номер кнопки " + answerNumber);
         showEntry(npc.getEntry(answerNumber + 1));
     }
 }
