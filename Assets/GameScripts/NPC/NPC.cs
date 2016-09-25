@@ -25,8 +25,7 @@ public class NPC
     /// <summary>Диалог с НИПом</summary>
     NPCDialog dialog;
     /// <summary>Номера квестов, которые НИП может принять</summary>
-    List<int> recived_quest = new List<int>();
-
+    public List<int> recived_quest = new List<int>();
     /// <summary>Уровень дружелюбности</summary>
     public int friendly = 0;
     /// <summary>Имя, которым НИП представился игроку</summary>

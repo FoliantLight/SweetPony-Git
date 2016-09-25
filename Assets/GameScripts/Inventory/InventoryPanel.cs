@@ -55,6 +55,8 @@ public class InventoryPanel : MonoBehaviour {
     }
 
     public void refillPanel() {
+		if (m_itemPanels == null)
+			return;
         foreach(var panel in m_itemPanels.Keys) {
             if(panel.transform.childCount != 0) {
                 Destroy(panel.transform.GetChild(0).gameObject);

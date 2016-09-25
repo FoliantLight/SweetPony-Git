@@ -26,16 +26,16 @@ public class MainPerson : MonoBehaviour {
     private int m_averageFramesToTrample;
 
     /// <summary>Престиж (дружелюбность)</summary>
-    public int prestige = 0;
+    private int prestige = 0;
 
-    /// <summary>Номера выполненных квестов для получения награды за них у какого-либо НИПа при встрече с ним</summary>
-    public List<int> doneQuests = new List<int>();
+    /// <summary>Номера выполненных квестов, которые нельзя получить второй раз</summary>
+    private List<int> doneQuests = new List<int>();
 
-    /// <summary>Полученные, но еще не выполненные квесты</summary>
-    public List<Quest> recievedQuests = new List<Quest>();
+    /// <summary>Все полученные квесты</summary>
+    private List<Quest> quests = new List<Quest>();
 
     /// <summary>Список встреченных НИПов, имена которых известны игроку</summary>
-    public List<string> metNames = new List<string>();
+    private List<string> knownNPCNames = new List<string>();
 
     private void Awake() {
         m_Anim = GetComponent<Animator>();
@@ -48,20 +48,22 @@ public class MainPerson : MonoBehaviour {
         m_averageFramesToTrample = 500;
 
         m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
-        if(m_inventoryCanvas == null) {
-            Debug.Log("На сцене нет объекта InventoryCanvas");
-        }
+		if (m_inventoryCanvas == null) {
+			Debug.Log ("На сцене нет объекта InventoryCanvas");
+		} else {
+			InventoryPanel panel = m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).GetComponent<InventoryPanel> ();
+			m_playerInventory = new Inventory (GameConsts.inventorySize, false);
+			m_playerInventory.inventoryPanel = panel;
 
-        InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.PlayerInventory).GetComponent<InventoryPanel>();
-        m_playerInventory = new Inventory(GameConsts.inventorySize, false);
-        m_playerInventory.inventoryPanel = panel;
-
-        m_inventoryCanvas.SetActive(false);
+			//m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).gameObject.SetActive (false);
+		}
 	}
 	
 	void Update () {
-        if(CrossPlatformInputManager.GetButtonDown(Buttons.Inventory)) {
+        if(CrossPlatformInputManager.GetButtonDown(Buttons.Inventory)) { 
             m_inventoryCanvas.SetActive(!m_inventoryCanvas.activeSelf);
+		//	m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).gameObject.SetActive (!m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).gameObject.activeSelf);
+
         }
 
         #region Поворот спрайта в направлении движения. Основное направление влево
@@ -145,4 +147,33 @@ public class MainPerson : MonoBehaviour {
 				res = false;
 		return res;
 	}
+
+	/// <summary>Запоминает, что НИП представился игроку</summary>
+	public void addKnownNPCName(String name)
+	{
+		knownNPCNames.Add (name);
+	}
+
+	/// <summary>Если НИП уже представился игроку, то в следующий раз при встрече его имя высвечивается рядом с НИПом</summary>
+	public bool isKnownNPCname(String name)
+	{
+		return knownNPCNames.FindIndex (x => x.Equals (name)) != -1;
+	}
+
+	/// <summary>НИП принимает квест с таким-то номером. Проверить выполнение</summary>
+	public void checkQuest(int q_id)
+	{
+		int id = quests.FindIndex (x => x.id == q_id);
+		if (id == -1)
+			return; // игрок не взял этот квест
+		
+		if (haveInInventory(quests [id].drop)) { // если эти предметы найдены
+			quests [id].done = true;
+			m_playerInventory.addItems (quests [id].drag);
+			prestige += quests [id].prestige;
+		}
+	}
+
+
+
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>Инвентарь игрока.</summary>
 public class Inventory {
-    private InventoryPanel m_inventoryPanel;
+    private InventoryPanel m_inventoryPanel = null;
     private bool m_takeOnly;
     /// <summary>Список предметов, находящихся в инвентаре</summary>
     private Dictionary<Vector2Int, InventoryItemInfo> m_items;

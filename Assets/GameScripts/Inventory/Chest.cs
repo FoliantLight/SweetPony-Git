@@ -16,7 +16,7 @@ public class Chest : ActionItem {
 
     void Awake() {
         m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
-        m_inventory = new Inventory(GameConsts.inventorySize, false);
+	    m_inventory = new Inventory(GameConsts.inventorySize, false);
         m_inventory.addItems(items);
 
         m_isOpened = false;
