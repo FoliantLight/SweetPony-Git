@@ -6,7 +6,7 @@ public class ItemPanel : MonoBehaviour, IDropHandler {
     private InventoryPanel m_inventoryPanel;
 
     void Start() {
-        m_inventoryPanel = transform.parent.GetComponent<InventoryPanel>();
+        m_inventoryPanel = getInventoryPanel(transform);
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -24,6 +24,10 @@ public class ItemPanel : MonoBehaviour, IDropHandler {
             icon.transform.SetParent(icon.oldParent);
         }
 
-        icon.GetComponent<RectTransform>().localPosition = new Vector3(0.0F, 0.0F, 0.0F);
+        icon.GetComponent<RectTransform>().localPosition = new Vector3(1.0F, -1.0F, 0.0F);
+    }
+
+    public static InventoryPanel getInventoryPanel(Transform itemPanel) {
+        return itemPanel.parent.parent.GetComponent<InventoryPanel>();
     }
 }

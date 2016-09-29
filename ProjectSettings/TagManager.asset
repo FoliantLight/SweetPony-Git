@@ -4,11 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - car
   - ActionItem
-  - door
-  - inside
   - NPC
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -52,11 +50,17 @@ TagManager:
   - name: OtherEnvironment
     uniqueID: 2004194371
     locked: 0
+  - name: BackHouse
+    uniqueID: 1195816375
+    locked: 0
   - name: InsideHouse
     uniqueID: 1735609059
     locked: 0
   - name: FrontHouse
     uniqueID: 2983591891
+    locked: 0
+  - name: AdditionalFrontHouse
+    uniqueID: 2638343397
     locked: 0
   - name: Characters
     uniqueID: 2347072915

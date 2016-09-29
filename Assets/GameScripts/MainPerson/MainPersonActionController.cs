@@ -2,7 +2,6 @@
 using UnityStandardAssets.CrossPlatformInput;
 
 public class MainPersonActionController : MonoBehaviour {
-
     private ActionItem m_actionItem;
 	
 	// Update is called once per frame

@@ -22,6 +22,9 @@ public class InventoryItemDictionary {
         addItem("arrow", new Vector2Int(2, 2));
         addItem("rhombus", new Vector2Int(3, 2));
         addItem("gear", new Vector2Int(3, 3));
+
+        addItem("bottle", new Vector2Int(1, 1));
+        addItem("swab", new Vector2Int(3, 2));
     }
 
     private void addItem(string name, Vector2Int size) {

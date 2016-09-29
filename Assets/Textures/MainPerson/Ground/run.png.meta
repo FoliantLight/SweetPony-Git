@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9d573f836ee03f94da8cf3643f75c0a6
-timeCreated: 1468361500
+timeCreated: 1474826910
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -64,13 +64,13 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.07}
+      pivot: {x: 0.5, y: 0.08}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -16, y: 39.1}
-        - {x: -16, y: -1.8999996}
-        - {x: 14, y: -1.8999996}
-        - {x: 14, y: 39.1}
+      - - {x: -16, y: 38.4}
+        - {x: -16, y: -2.6000004}
+        - {x: 14, y: -2.6000004}
+        - {x: 14, y: 38.4}
     - name: run_1
       rect:
         serializedVersion: 2
@@ -79,17 +79,17 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.07}
+      pivot: {x: 0.5, y: 0.08}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -17, y: 38.1}
-        - {x: -17, y: -0.8999996}
-        - {x: -12, y: -1.8999996}
-        - {x: 15, y: -1.8999996}
-        - {x: 18, y: -0.8999996}
-        - {x: 18, y: 11.1}
-        - {x: 11, y: 26.1}
-        - {x: -3, y: 38.1}
+      - - {x: -17, y: 37.4}
+        - {x: -17, y: -1.6000004}
+        - {x: -12, y: -2.6000004}
+        - {x: 15, y: -2.6000004}
+        - {x: 18, y: -1.6000004}
+        - {x: 18, y: 10.4}
+        - {x: 11, y: 25.4}
+        - {x: -3, y: 37.4}
     - name: run_2
       rect:
         serializedVersion: 2
@@ -98,18 +98,18 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.07}
+      pivot: {x: 0.5, y: 0.08}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 1, y: 37.1}
-        - {x: -18, y: 37.1}
-        - {x: -18, y: 9.1}
-        - {x: -12, y: -0.8999996}
-        - {x: -10, y: -1.8999996}
-        - {x: 8, y: -1.8999996}
-        - {x: 19, y: 2.1000004}
-        - {x: 19, y: 15.1}
-        - {x: 14, y: 28.1}
+      - - {x: 1, y: 36.4}
+        - {x: -18, y: 36.4}
+        - {x: -18, y: 8.4}
+        - {x: -12, y: -1.6000004}
+        - {x: -10, y: -2.6000004}
+        - {x: 8, y: -2.6000004}
+        - {x: 19, y: 1.3999996}
+        - {x: 19, y: 14.4}
+        - {x: 14, y: 27.4}
     - name: run_3
       rect:
         serializedVersion: 2
@@ -118,14 +118,14 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.07}
+      pivot: {x: 0.5, y: 0.08}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -18, y: 36.1}
-        - {x: -18, y: -1.8999996}
-        - {x: 18, y: -1.8999996}
-        - {x: 18, y: 20.1}
-        - {x: 5, y: 36.1}
+      - - {x: -18, y: 35.4}
+        - {x: -18, y: -2.6000004}
+        - {x: 18, y: -2.6000004}
+        - {x: 18, y: 19.4}
+        - {x: 5, y: 35.4}
     - name: run_4
       rect:
         serializedVersion: 2
@@ -134,14 +134,14 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.07}
+      pivot: {x: 0.5, y: 0.08}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -17, y: 38.1}
-        - {x: -17, y: -1.8999996}
-        - {x: 15, y: -1.8999996}
-        - {x: 15, y: 22.1}
-        - {x: -3, y: 38.1}
+      - - {x: -17, y: 37.4}
+        - {x: -17, y: -2.6000004}
+        - {x: 15, y: -2.6000004}
+        - {x: 15, y: 21.4}
+        - {x: -3, y: 37.4}
     - name: run_5
       rect:
         serializedVersion: 2
@@ -150,16 +150,16 @@ TextureImporter:
         width: 50
         height: 70
       alignment: 9
-      pivot: {x: 0.5, y: 0.07}
+      pivot: {x: 0.5, y: 0.08}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -16, y: 39.1}
-        - {x: -16, y: 18.1}
-        - {x: -11, y: -1.8999996}
-        - {x: 7, y: -1.8999996}
-        - {x: 13, y: 2.1000004}
-        - {x: 13, y: 24.1}
-        - {x: 1, y: 39.1}
+      - - {x: -16, y: 38.4}
+        - {x: -16, y: 17.4}
+        - {x: -11, y: -2.6000004}
+        - {x: 7, y: -2.6000004}
+        - {x: 13, y: 1.3999996}
+        - {x: 13, y: 23.4}
+        - {x: 1, y: 38.4}
     outline: []
   spritePackingTag: 
   userData: 

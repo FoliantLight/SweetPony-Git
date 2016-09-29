@@ -5,13 +5,15 @@ using UnityStandardAssets.CrossPlatformInput;
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class ActionItem : MonoBehaviour {
 
-    private BoxCollider2D boxCollider;
+    private BoxCollider2D[] boxColliders;
     protected MainPerson m_mainPersonScript;
 
     // Use this for initialization
     protected virtual void Start () {
-        boxCollider = GetComponent<BoxCollider2D>();
-        boxCollider.isTrigger = true;
+        boxColliders = GetComponents<BoxCollider2D>();
+        for(int i = 0; i < boxColliders.Length; i++) {
+            boxColliders[i].isTrigger = true;
+        }
         m_mainPersonScript = MainPerson.getMainPersonScript();
     }
 
@@ -39,6 +41,7 @@ public abstract class ActionItem : MonoBehaviour {
 
     public abstract void triggerAction();
 
-    public virtual void exitAction() {        
+    public virtual void exitAction() {
+        
     }
 }

@@ -21,6 +21,10 @@ public class MainPerson : MonoBehaviour {
 
     private GameObject m_inventoryCanvas;
 
+    public GameObject inventoryCanvas {
+        get { return m_inventoryCanvas; }
+    }
+
     private System.Random rnd = new System.Random();
     /// <summary>Среднее количество кадров между анимацией топтания на месте</summary>
     private int m_averageFramesToTrample;
@@ -42,12 +46,13 @@ public class MainPerson : MonoBehaviour {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_boxCollider = GetComponent<BoxCollider2D>();
+
+        m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
     }
 
     void Start () {
         m_averageFramesToTrample = 500;
 
-        m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
         if(m_inventoryCanvas == null) {
             Debug.Log("На сцене нет объекта InventoryCanvas");
         }
@@ -55,8 +60,6 @@ public class MainPerson : MonoBehaviour {
         InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.PlayerInventory).GetComponent<InventoryPanel>();
         m_playerInventory = new Inventory(GameConsts.inventorySize, false);
         m_playerInventory.inventoryPanel = panel;
-
-        m_inventoryCanvas.SetActive(false);
 	}
 	
 	void Update () {
@@ -72,6 +75,23 @@ public class MainPerson : MonoBehaviour {
             m_spriteRenderer.flipX = false;
         }
         #endregion
+
+        GameObject[] platforms = GameObject.FindGameObjectsWithTag(Tags.Platform);
+        for(int i = 0; i < platforms.Length; i++) {
+            BoxCollider2D[] colliders = platforms[i].GetComponents<BoxCollider2D>();
+            for(int j = 0; j < colliders.Length; j++) {
+                float colliderY = platforms[i].transform.position.y + colliders[j].offset.y + colliders[j].size.y / 2;
+
+                if(transform.position.y > colliderY) {
+                    colliders[j].enabled = true;
+                }
+                else {
+                    colliders[j].enabled = false;
+                }
+            }
+
+
+        }
     }
 
     void FixedUpdate() {

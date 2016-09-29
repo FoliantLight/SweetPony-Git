@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 
 public class InventoryPanel : MonoBehaviour {
+    public const int ColorsPanelChild = 0;
+    public const int ItemsPanelChild = 1;
+
     /// <summary> Инвентарь, связанный с панелью </summary>
     private Inventory m_inventory;
-    private GameObject m_inventoryIcon;
-    private GameObject m_itemPanel;
 
-    /// <summary>Хранение координат для каждой ячейки</summary>
-    private Dictionary<ItemPanel, Vector2Int> m_itemPanels;
+    /// <summary> Панель с иконками предметов </summary>
+    private ItemsPanel m_itemsPanel;
+    /// <summary> Панель с цветовой индикацией инвентаря </summary>
+    private ColorsPanel m_colorsPanel;
 
     public Inventory inventory {
         get { return m_inventory; }
@@ -20,50 +21,55 @@ public class InventoryPanel : MonoBehaviour {
         }
     }
 
-    void Awake() {
-        m_itemPanels = new Dictionary<ItemPanel, Vector2Int>();
-        m_itemPanel = Resources.Load<GameObject>("InventoryRes/ItemPanel");
-        m_inventoryIcon = Resources.Load<GameObject>("InventoryRes/InventoryIcon");
+    public ItemsPanel itemsPanel {
+        get { return m_itemsPanel; }
+    }
 
-        for(int i = 0; i < GameConsts.inventorySize.row; i++) {
-            for(int j = 0; j < GameConsts.inventorySize.column; j++) {            
-                addItemPanel(new Vector2Int(i, j));
-            }
-        }
+    public ColorsPanel colorsPanel {
+        get { return m_colorsPanel; }
+    }
+
+    void Awake() {
+        m_colorsPanel = transform.GetChild(ColorsPanelChild).GetComponent<ColorsPanel>();
+        m_itemsPanel = transform.GetChild(ItemsPanelChild).GetComponent<ItemsPanel>();
+
+        m_colorsPanel.fill(GameConsts.inventorySize);
+        m_itemsPanel.fill(GameConsts.inventorySize);
     }
 
     public Vector2Int panelCoordinates(ItemPanel panel) {
-        return m_itemPanels[panel];
-    }
-
-    public void addItemPanel(Vector2Int pos) {
-        GameObject panel = Instantiate(m_itemPanel) as GameObject;
-        panel.transform.SetParent(transform, false);
-        m_itemPanels.Add(panel.GetComponent<ItemPanel>(), pos);
-    }
-
-    public void addIconToItemPanel(int number, InventoryItemInfo info) {
-        Transform panel = transform.GetChild(number);
-
-        GameObject icon = Instantiate(m_inventoryIcon) as GameObject;
-        icon.transform.SetParent(panel, false);
-        icon.GetComponent<Image>().sprite = Resources.Load<Sprite>(Paths.IconPath + info.name);
-        icon.GetComponent<Image>().SetNativeSize();
-        icon.GetComponent<RectTransform>().localPosition = new Vector3(0.0F, 0.0F, 0.0F);
-
-        icon.GetComponent<InventoryIcon>().info = info;
+        int number = panel.transform.GetSiblingIndex();
+        Vector2Int size = m_inventory.size;
+        int row = number / size.column;
+        int column = number % size.column;
+        return new Vector2Int(row, column);
     }
 
     public void refillPanel() {
-        foreach(var panel in m_itemPanels.Keys) {
-            if(panel.transform.childCount != 0) {
-                Destroy(panel.transform.GetChild(0).gameObject);
-            }
+        for(int i = 0; i < m_colorsPanel.transform.childCount; i++) {
+            m_colorsPanel.setColorToPanel(i, ColorsPanel.noColor);
         }
 
         foreach(var item in m_inventory.items) {
-            int number = GameConsts.inventorySize.column * item.Key.row + item.Key.column;
-            addIconToItemPanel(number, item.Value);
+            int number = m_inventory.childNumberFromVector(item.Key);
+            addIcon(number, item.Value);
+            setColorArea(item.Key, item.Value.size, ColorsPanel.occupiedColor);
         }
+    }
+
+    public void setColorArea(Vector2Int pos, Vector2Int size, Color color) {
+        for(int i = pos.row; i < pos.row + size.row; i++) {
+            for(int j = pos.column; j < pos.column + size.column; j++) {
+                m_colorsPanel.setColorToPanel(m_inventory.childNumberFromVector(i, j), color);
+            }
+        }
+    }
+
+    public void addIcon(int number, InventoryItemInfo info) {
+        m_itemsPanel.addIcon(number, info);
+    }
+
+    public void setColor(int number, Color color) {
+        m_colorsPanel.setColorToPanel(number, color);
     }
 }

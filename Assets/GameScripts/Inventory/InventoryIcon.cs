@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -26,8 +26,6 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         set { m_info = value; }
     }
 
-    //Задать ItemInfo с размером и именем для префаба и иконки
-
 	// Use this for initialization
 	void Start () {
         m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas).transform;
@@ -38,7 +36,7 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnBeginDrag(PointerEventData eventData) {
         m_oldParent = transform.parent;
-        m_inventoryPanel = m_oldParent.parent.GetComponent<InventoryPanel>();
+        m_inventoryPanel = ItemPanel.getInventoryPanel(m_oldParent);
         ItemPanel panel = m_oldParent.GetComponent<ItemPanel>();
         Vector2Int pos = m_inventoryPanel.panelCoordinates(panel);
 
@@ -52,6 +50,14 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData) {
         transform.position = Input.mousePosition;
+        List<RaycastResult> list = new List<RaycastResult>();
+        m_inventoryCanvas.GetComponent<GraphicRaycaster>().Raycast(eventData, list);
+        for(int i = 0; i < list.Count; i++) {
+            ItemPanel panel = list[i].gameObject.GetComponent<ItemPanel>();
+            if(panel != null) {
+                
+            }
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData) {
@@ -67,15 +73,17 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     }
 
     void setItemPanelsRaycastTarget(bool value) {
-        Transform playerInventory = m_inventoryCanvas.GetChild(Inventories.PlayerInventory);
-        for(int i = 0; i < playerInventory.childCount; i++) {
-            playerInventory.GetChild(i).GetComponent<Image>().raycastTarget = value;
+        InventoryPanel playerInventory = m_inventoryCanvas.GetChild(Inventories.PlayerInventory).GetComponent<InventoryPanel>();
+        Transform itemsPanel = playerInventory.itemsPanel.transform;
+        for(int i = 0; i < itemsPanel.childCount; i++) {
+            itemsPanel.GetChild(i).GetComponent<Image>().raycastTarget = value;
         }
 
-        Transform othersInventory = m_inventoryCanvas.GetChild(Inventories.OthersInventory);
+        InventoryPanel othersInventory = m_inventoryCanvas.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
         if(othersInventory.gameObject.activeSelf) {
-            for(int i = 0; i < othersInventory.childCount; i++) {
-                othersInventory.GetChild(i).GetComponent<Image>().raycastTarget = value;
+            itemsPanel = othersInventory.itemsPanel.transform;
+            for(int i = 0; i < itemsPanel.childCount; i++) {
+                itemsPanel.GetChild(i).GetComponent<Image>().raycastTarget = value;
             }
         }
     }

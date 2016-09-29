@@ -34,7 +34,7 @@ public class Inventory {
     private bool[,] m_occupiedCells;
 
     /// <summary>Размеры инвентаря в ячейках</summary>
-    public Vector2Int m_size;
+    private Vector2Int m_size;
 
     public Vector2Int size {
         get { return m_size; }
@@ -70,12 +70,17 @@ public class Inventory {
     /// <summary>Добавляет предмет в инвентарь</summary>
     public bool addItem(Vector2Int pos, InventoryItemInfo info, bool addIcon) {
         if(checkPosition(pos, info.size)) {
-            if(addIcon && m_inventoryPanel != null) {
-                int number = m_size.column * pos.row + pos.column;
-                m_inventoryPanel.addIconToItemPanel(number, info);
-            }
             m_items.Add(pos, info);
             setOccupiedCells(pos, info.size, true);
+
+            if(m_inventoryPanel != null) {
+                m_inventoryPanel.setColorArea(pos, info.size, ColorsPanel.occupiedColor);
+                if(addIcon) {                
+                    int number = childNumberFromVector(pos);
+                    m_inventoryPanel.addIcon(number, info);
+                }
+            }
+
             return true;
         }
         else {
@@ -109,6 +114,14 @@ public class Inventory {
         m_items.Remove(pos);
     }
 
+    public void setOccupiedCells(Vector2Int pos, Vector2Int size, bool value) {
+        for(int i = pos.row; i < pos.row + size.row; i++) {
+            for(int j = pos.column; j < pos.column + size.column; j++) {
+                m_occupiedCells[i, j] = value;
+            }
+        }
+    }
+
     public bool checkPosition(Vector2Int pos, Vector2Int size) {
         if(pos.row + size.row > m_size.row) {
             return false;
@@ -126,11 +139,17 @@ public class Inventory {
         return true;
     }
 
-    public void setOccupiedCells(Vector2Int pos, Vector2Int size, bool value) {
-        for(int i = pos.row; i < pos.row + size.row; i++) {
-            for(int j = pos.column; j < pos.column + size.column; j++) {
-                m_occupiedCells[i, j] = value;
-            }
-        }
+    public int childNumberFromVector(Vector2Int pos) {        
+        return m_size.column * pos.row + pos.column;
+    }
+
+    public int childNumberFromVector(int i, int j) {        
+        return m_size.column * i + j;
+    }
+
+    public Vector2Int vectorFromChildNumber(int number) {
+        int row = number / m_size.column;
+        int column = number % m_size.column;
+        return new Vector2Int(row, column);
     }
 }

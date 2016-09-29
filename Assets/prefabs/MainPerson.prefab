@@ -28,7 +28,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 138176}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: -20, z: 0}
+  m_LocalPosition: {x: 33.3728, y: -0.1058, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -49,7 +49,7 @@ Rigidbody2D:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &6108046
 BoxCollider2D:
@@ -62,9 +62,9 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: fef06a4821cb2824481713abb84dd14b, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: -0.00012207031, y: 0.5935745}
+  m_Offset: {x: 0, y: 0.57535934}
   serializedVersion: 2
-  m_Size: {x: 0.7534535, y: 1.1873181}
+  m_Size: {x: 0.7534535, y: 1.1873634}
 --- !u!95 &9542676
 Animator:
   serializedVersion: 3

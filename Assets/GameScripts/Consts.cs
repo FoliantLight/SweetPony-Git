@@ -29,8 +29,23 @@ public static class Layers {
     public const int Items = 12;
 }
 
+public static class SortingLayers {
+    public const string Default = "Default";
+
+    public const string Background = "Background";
+    public const string OtherEnvironment = "OtherEnvironment";
+    public const string InsideHouse = "InsideHouse";
+    public const string FrontHouse = "FrontHouse";
+    public const string AdditionalFrontHouse = "AdditionalFrontHouse";
+    public const string Characters = "Characters";
+    public const string Items = "Items";
+    public const string Player = "Player";
+    public const string Foreground = "Foreground";
+}
+
 public static class Tags {
     public const string Player = "Player";
+    public const string Platform = "Platform";
 }
 
 public static class Inventories {
@@ -40,6 +55,7 @@ public static class Inventories {
 
 public static class ObjectNames {
     public const string InventoryCanvas = "InventoryCanvas";
+    public const string UICanvas = "UICanvas";
 }
 
 public static class Paths {
