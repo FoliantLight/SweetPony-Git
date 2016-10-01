@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class MainPerson : MonoBehaviour {
+    const float checkGroundDiff = 0.05F;
+
     private float v = 0;//вертикальная ось (W,S or arrow down,arrow up)
     private float h = 0;//горизонтальная ось (A,D or arrow left,arrow right)
 
@@ -89,8 +91,6 @@ public class MainPerson : MonoBehaviour {
                     colliders[j].enabled = false;
                 }
             }
-
-
         }
     }
 
@@ -99,15 +99,15 @@ public class MainPerson : MonoBehaviour {
         v = CrossPlatformInputManager.GetAxis(Axes.Vertical);
         h = CrossPlatformInputManager.GetAxis(Axes.Horizontal);
 
-        m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
-        m_Anim.SetBool("Grounded", checkGround());
-        m_Anim.SetBool("move", false);
-        #endregion
+        float vSpeed = m_Rigidbody2D.velocity.y;
 
-        if (h != 0)
-        {
-            m_Anim.SetBool("move", true);
-        }
+        m_Anim.SetFloat("vSpeed", vSpeed);
+        m_Anim.SetBool("Grounded", checkGround());
+
+        bool isMoving = (h != 0 || vSpeed != 0);
+
+        m_Anim.SetBool("isMoving", isMoving);
+        #endregion
 
         #region Прыжок
         if (checkGround()) {
@@ -145,8 +145,8 @@ public class MainPerson : MonoBehaviour {
         float downPointXRight = transform.position.x + m_boxCollider.offset.x + m_boxCollider.size.x / 2.0F;
         float downPointY = transform.position.y + m_boxCollider.offset.y - m_boxCollider.size.y / 2;
 
-        Vector2 topLeft = new Vector2(downPointXLeft, downPointY - 0.05F);
-        Vector2 bottomRight = new Vector2(downPointXRight, downPointY + 0.05F);
+        Vector2 topLeft = new Vector2(downPointXLeft, downPointY - checkGroundDiff);
+        Vector2 bottomRight = new Vector2(downPointXRight, downPointY + checkGroundDiff);
         #endregion
 
         Collider2D[] colliders = Physics2D.OverlapAreaAll(topLeft, bottomRight);
