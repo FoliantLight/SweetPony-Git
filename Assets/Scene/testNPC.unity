@@ -385,6 +385,52 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a5cc4a01d3217e74495b766140e7ad2c, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &833767783
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -19.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 463710, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 117942, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_Name
+      value: RaisySlash
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &1345174469
 Prefab:
   m_ObjectHideFlags: 0
@@ -704,6 +750,16 @@ Prefab:
       propertyPath: m_Size.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 21281270, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 22f1696abcf64f340926e86f0e9dc235,
+        type: 3}
+    - target: {fileID: 11495646, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
+      propertyPath: face
+      value: 
+      objectReference: {fileID: 21300000, guid: a5586837b6b0e4e4ab104d9e90270668,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 889c523afae51254a8237d745fa4f1b2, type: 2}
   m_IsPrefabParent: 0

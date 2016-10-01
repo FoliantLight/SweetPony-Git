@@ -21,6 +21,7 @@ public class NPCActionController : ActionItem {
     protected override void Start () {
         base.Start();
 		name = this.gameObject.name;
+		Debug.Log (name + "start");
         canvas = transform.FindChild("NPCDialog");
         question = canvas.FindChild("Question").FindChild("Text").GetComponent<Text>();
         #region Всем созданным кнопкам добавляется обработчик нажатия
@@ -38,13 +39,10 @@ public class NPCActionController : ActionItem {
         #endregion
         nameText = canvas.FindChild("Name").FindChild("Text").GetComponent<Text>();
         canvas.GetComponent<Canvas>().enabled = false;
-
-		#region инвентарь
-		inventoryStart();
-		#endregion
     }
 
-	private void inventoryStart()
+	/// <summary>Inventory</summary>
+	void Awake()
 	{
 		invCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
 		if (invCanvas == null) {
@@ -54,22 +52,16 @@ public class NPCActionController : ActionItem {
 
 		inv = new Inventory(GameConsts.inventorySize, false);
 		inv.addItems(items);
-
-		InventoryPanel panel = invCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
-		if (panel == null) {
-			Debug.Log (name + " не может найти объект " + Inventories.OthersInventory);
-			return;
-		}
-		inv.inventoryPanel = panel;
 	}
 
     /// <summary>Пояление диалогового окна</summary>
     public override void triggerAction() {
+		
         name = this.gameObject.name;
 
         NPC.encode(name); // потом можно отключить
         npc = new NPC(name);
-
+		Debug.Log (name + " open");
 		if (MainPerson.getMainPersonScript ().isKnownNPCname (name))
 			nameText.text = name;
 		else
@@ -115,7 +107,7 @@ public class NPCActionController : ActionItem {
     /// <param name="entry">Диалоговая запись</param>
     void showEntry(NPCEntry entry)
     {
-        //Debug.Log("Номер записи " + entry.number);
+       // Debug.Log("Номер записи " + entry.number);
         question.text = entry.question;
         #region Появляются/скрываются лишние кнопки
         int answersCount;

@@ -42,28 +42,26 @@ public class MainPerson : MonoBehaviour {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_boxCollider = GetComponent<BoxCollider2D>();
+
+		m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
     }
 
     void Start () {
         m_averageFramesToTrample = 500;
 
-        m_inventoryCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
-		if (m_inventoryCanvas == null) {
-			Debug.Log ("На сцене нет объекта InventoryCanvas");
-		} else {
-			InventoryPanel panel = m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).GetComponent<InventoryPanel> ();
-			m_playerInventory = new Inventory (GameConsts.inventorySize, false);
-			m_playerInventory.inventoryPanel = panel;
-
-			//m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).gameObject.SetActive (false);
+		if(m_inventoryCanvas == null) {
+			Debug.Log("На сцене нет объекта InventoryCanvas");
 		}
+
+		InventoryPanel panel = m_inventoryCanvas.transform.GetChild(Inventories.PlayerInventory).GetComponent<InventoryPanel>();
+		m_playerInventory = new Inventory(GameConsts.inventorySize, false);
+		m_playerInventory.inventoryPanel = panel;
+		m_inventoryCanvas.SetActive(false);
 	}
 	
 	void Update () {
         if(CrossPlatformInputManager.GetButtonDown(Buttons.Inventory)) { 
             m_inventoryCanvas.SetActive(!m_inventoryCanvas.activeSelf);
-		//	m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).gameObject.SetActive (!m_inventoryCanvas.transform.GetChild (Inventories.PlayerInventory).gameObject.activeSelf);
-
         }
 
         #region Поворот спрайта в направлении движения. Основное направление влево

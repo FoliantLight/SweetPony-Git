@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
+using System.Linq;
+using System.Text;
+using System;
+
 
 /// <summary>Квест</summary>
 public class Quest
@@ -90,9 +94,11 @@ public class Quest
     /// <returns>Список номеров квестов</returns>
     public static List<int> parseIndexRecieved(XmlNode root)
     {
-        var res = new List<int>();
+		var res = new List<int>();
+		try{
         foreach (XmlNode c in root.SelectNodes("quest"))
             res.Add(int.Parse(c.InnerText));
+		} catch (Exception e) {;}
         return res;
     }
 }

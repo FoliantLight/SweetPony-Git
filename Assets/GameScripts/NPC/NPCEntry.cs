@@ -43,13 +43,21 @@ public class NPCEntry
     /// <param name="xml"></param>
     public NPCEntry(XmlNode xml)
     {
-        question = xml.Attributes.GetNamedItem("question").Value;
+		try{
+        	question = xml.Attributes.GetNamedItem("question").Value;
+		} catch (Exception e) {question="";}
         if (xml.Name != "default")
             number = xml.Attributes.GetNamedItem("id").Value;
-        animation = xml.Attributes.GetNamedItem("animation").Value;
+		
+		try{
+        	animation = xml.Attributes.GetNamedItem("animation").Value;
+		} catch (Exception e) {animation = "";}
+
         foreach (XmlNode ch in xml.SelectNodes("answ"))
         {
+			try{
             currFriendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
+			} catch (Exception e) { currFriendly.Add(0);}
             answers.Add(ch.InnerText);
         }
         isFinish = (answers.Count == 0);
