@@ -74,7 +74,10 @@ PlayerSettings:
   ignoreAlphaClear: 0
   xboxOneResolution: 0
   xboxOneMonoLoggingLevel: 0
+<<<<<<< HEAD
   xboxOneLoggingLevel: 1
+=======
+>>>>>>> e5fd049207c71fb4ff2a6c2ef138185037f36e9b
   ps3SplashScreen: {fileID: 0}
   videoMemoryForVertexBuffers: 0
   psp2PowerMode: 0

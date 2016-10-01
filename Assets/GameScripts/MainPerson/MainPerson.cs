@@ -101,31 +101,42 @@ public class MainPerson : MonoBehaviour {
 
         m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
         m_Anim.SetBool("Grounded", checkGround());
+        m_Anim.SetBool("move", false);
         #endregion
+
+        if (h != 0)
+        {
+            m_Anim.SetBool("move", true);
+        }
+
         #region Прыжок
         if (checkGround()) {
-            if (CrossPlatformInputManager.GetButtonDown(Buttons.Jump)) {
-                m_Rigidbody2D.AddForce(new Vector2(0, GameConsts.JumpForce));
+            if (CrossPlatformInputManager.GetButtonDown(Buttons.Jump)) {                
                 m_Anim.SetBool("Grounded", false);
                 m_Anim.SetTrigger("Jmp");
+                m_Rigidbody2D.AddForce(new Vector2(0, GameConsts.JumpForce));
             }
         }
-        #endregion
+        #endregion      
 
         #region Движение
         float hSpeed = h * GameConsts.PlayerSpeed;
         if (CrossPlatformInputManager.GetButton(Buttons.Run)) {
             hSpeed *= GameConsts.RunSpeedMultiplier;
         }
+        
         m_Anim.SetFloat("hSpeed", hSpeed);
+        
         transform.position += new Vector3(Time.fixedDeltaTime * hSpeed, 0);
         #endregion
 
         #region рандомное топтание на месте.
-        if(h == 0 && checkGround() && rnd.Next(m_averageFramesToTrample) == 0) {
+        if(rnd.Next(m_averageFramesToTrample) == 0) {
             m_Anim.SetTrigger("Trample");
         }
         #endregion
+
+     
     }
 
     bool checkGround() {
