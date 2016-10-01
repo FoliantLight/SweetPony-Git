@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 /// <summary>Абстрактный класс предмета, который можно положить в инвентарь</summary>
-public class InventoryItem : MonoBehaviour {
+public class InventoryItem : MonoBehaviour, INote {
     /// <summary>Информация о предмете предмета, по ней загружается его префаб и спрайт</summary>
     [SerializeField]
     private string m_name;
@@ -17,5 +17,9 @@ public class InventoryItem : MonoBehaviour {
 
     void Start() {
         m_info = InventoryItemDictionary.getInstance.getItem(m_name);
+    }
+
+    public string getNoteString() {
+        return m_info.name;
     }
 }

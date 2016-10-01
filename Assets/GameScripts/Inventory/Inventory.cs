@@ -74,7 +74,7 @@ public class Inventory {
             setOccupiedCells(pos, info.size, true);
 
             if(m_inventoryPanel != null) {
-                m_inventoryPanel.setColorArea(pos, info.size, ColorsPanel.occupiedColor);
+//                m_inventoryPanel.setColorArea(pos, info.size, ColorsPanel.occupiedColor);
                 if(addIcon) {                
                     int number = childNumberFromVector(pos);
                     m_inventoryPanel.addIcon(number, info);

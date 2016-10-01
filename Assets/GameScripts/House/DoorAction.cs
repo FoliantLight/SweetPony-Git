@@ -16,6 +16,8 @@ public class DoorAction : ActionItem {
 
     //Слой отрисовки персонажа внутри дома
     public string m_playerSortingLayer;
+    //Сохранение горизонтальной координаты при перемещении
+    public bool m_keepXCoordinate;
 
     //Переменная, которая отвечает за перемещение между домом и улицей
     protected bool m_inHouse = false;
@@ -42,7 +44,12 @@ public class DoorAction : ActionItem {
                 m_insideColliders.gameObject.SetActive(false);
             }
 
-            m_mainPersonScript.transform.position = new Vector3(m_outPoint.position.x, m_outPoint.position.y, 0.0F);
+            float xPos = m_outPoint.position.x;
+            if(m_keepXCoordinate) {
+                xPos = m_mainPersonScript.transform.position.x;
+            }
+
+            m_mainPersonScript.transform.position = new Vector3(xPos, m_outPoint.position.y, 0.0F);
             m_inHouse = false;
         }
         else {
@@ -52,7 +59,12 @@ public class DoorAction : ActionItem {
                 m_insideColliders.gameObject.SetActive(true);
             }
 
-            m_mainPersonScript.transform.position = new Vector3(m_inPoint.position.x, m_inPoint.position.y, 0.0F);
+            float xPos = m_inPoint.position.x;
+            if(m_keepXCoordinate) {
+                xPos = m_mainPersonScript.transform.position.x;
+            }
+
+            m_mainPersonScript.transform.position = new Vector3(xPos, m_inPoint.position.y, 0.0F);
             m_inHouse = true;
         }
     }

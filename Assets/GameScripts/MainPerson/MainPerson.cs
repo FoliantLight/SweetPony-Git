@@ -130,12 +130,15 @@ public class MainPerson : MonoBehaviour {
 
     bool checkGround() {
         #region Вычисление середины нижней стороны коллидера
-        float downPointX = transform.position.x + m_boxCollider.offset.x;
+        float downPointXLeft = transform.position.x + m_boxCollider.offset.x - m_boxCollider.size.x / 2.0F;
+        float downPointXRight = transform.position.x + m_boxCollider.offset.x + m_boxCollider.size.x / 2.0F;
         float downPointY = transform.position.y + m_boxCollider.offset.y - m_boxCollider.size.y / 2;
-        Vector2 downPoint = new Vector2(downPointX, downPointY);
+
+        Vector2 topLeft = new Vector2(downPointXLeft, downPointY - 0.05F);
+        Vector2 bottomRight = new Vector2(downPointXRight, downPointY + 0.05F);
         #endregion
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(downPoint, 0.1F);
+        Collider2D[] colliders = Physics2D.OverlapAreaAll(topLeft, bottomRight);
         for (int i = 0; i < colliders.Length; i++) {
             int layer = colliders[i].gameObject.layer;
             if(layer == Layers.Solid || layer == Layers.Platforms) {

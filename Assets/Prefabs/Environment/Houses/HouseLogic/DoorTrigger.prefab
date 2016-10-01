@@ -12,7 +12,7 @@ GameObject:
   - 61: {fileID: 6167320}
   - 114: {fileID: 11450316}
   m_Layer: 11
-  m_Name: Door
+  m_Name: DoorTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_playerSortingLayer: InsideHouse
+  m_keepXCoordinate: 1
 --- !u!212 &21267758
 SpriteRenderer:
   m_ObjectHideFlags: 1
