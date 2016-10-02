@@ -9,7 +9,7 @@ public class NPCActionController : ActionItem {
     Text nameText;
     List<Transform> buttons = new List<Transform>();
 	public Sprite face = null;
-	public string name = "";
+    string name = "";
 
 	private GameObject invCanvas;
 	[SerializeField]
@@ -56,7 +56,6 @@ public class NPCActionController : ActionItem {
 
     /// <summary>Пояление диалогового окна</summary>
     public override void triggerAction() {
-		
         name = this.gameObject.name;
 
         NPC.encode(name); // потом можно отключить
@@ -79,11 +78,14 @@ public class NPCActionController : ActionItem {
 
 	/// <summary>При удалении игрока от НИПа все незабранные предметы исчезают и окна закрываются</summary>
     public override void exitAction() {
-        canvas.GetComponent<Canvas>().enabled = false;
-		invCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(false);
-		inv.inventoryPanel = null;
-		if (inv != null)
+		if (canvas != null)
+        	canvas.GetComponent<Canvas>().enabled = false;
+		if (invCanvas != null)
+			invCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(false);
+		if (inv != null) {
 			inv.items.Clear (); 
+			inv.inventoryPanel = null;
+		}
 	}
 
     /// <summary>Прячет кнопку с ответом</summary>
@@ -107,8 +109,10 @@ public class NPCActionController : ActionItem {
     /// <param name="entry">Диалоговая запись</param>
     void showEntry(NPCEntry entry)
     {
-       // Debug.Log("Номер записи " + entry.number);
+        Debug.Log("Номер записи " + entry.number);
         question.text = entry.question;
+		if (entry.name != "") nameText.text = entry.name;
+
         #region Появляются/скрываются лишние кнопки
         int answersCount;
         if (buttons.Count < entry.answers.Count)
@@ -123,24 +127,40 @@ public class NPCActionController : ActionItem {
         }
         #endregion
 
-		#region drag&drop
-		//Debug.Log("drag " + entry.drag.Count.ToString() + ". drop " + entry.drop.Count.ToString());
-		if (entry.drag.Count > 0)
-		{
-			if (invCanvas == null) 
-				Debug.Log(name + " npc entry - inv canvas is null");
-			
-			invCanvas.SetActive(true);
-			invCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(true);
-
-			InventoryPanel panel = invCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
-			if (panel == null) 
-				Debug.Log(name + " npc entry - inv panel is null");
-			inv.inventoryPanel = panel;
-			inv.addItems(entry.drag);	
+		#region drag&drop, money
+		if (entry.drop.Count > 0) {
+			if (MainPerson.getMainPersonScript().haveInInventory(entry.drop))
+			{
+				MainPerson.getMainPersonScript().drop(entry.drop);
+			} else{
+				question.text += "\n У тебя нет такого предмета";
+			}
 		}
-		//MainPerson.getMainPersonScript().drop(entry.drop);
+		//Debug.Log(name + " drag " +entry.drag.Count);
+		if (entry.drag.Count > 0) 
+		{
+			//Debug.Log(name + " money " + MainPerson.getMainPersonScript().money + " " +entry.money); 
+			if (MainPerson.getMainPersonScript().money > entry.money)
+			{
+				MainPerson.getMainPersonScript().money -= entry.money;
+			//	Debug.Log(name + " money" + MainPerson.getMainPersonScript().money);
+				if (invCanvas == null) 
+					Debug.Log(name + " npc entry - inv canvas is null");
+
+				invCanvas.SetActive(true);
+				invCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(true);
+
+				InventoryPanel panel = invCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
+				if (panel == null) 
+					Debug.Log(name + " npc entry - inv panel is null");
+				inv.inventoryPanel = panel;
+				inv.addItems(entry.drag);	
+			} else {
+				question.text += "\n Не хватает денег";
+			}
+		}
 		#endregion
+
 
         for (int i = 0; i < answersCount; i++)
         {
@@ -152,8 +172,6 @@ public class NPCActionController : ActionItem {
             // buttons[i].GetComponent<Button>().spriteState.pressedSprite = one_answer_pressed или two_answer_pressed
             #endregion
         }
-        if (entry.name != "")
-            nameText.text = entry.name;
     }
 
     /// <summary>Обработка события нажатия на кнопку ответа</summary>

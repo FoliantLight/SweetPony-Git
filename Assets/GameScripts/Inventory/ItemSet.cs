@@ -39,11 +39,16 @@ public class ItemSet {
     public static List<ItemSet> parse(XmlNode root) {
         var res = new List<ItemSet>();
         if (root == null) return res;
-        foreach (XmlNode c in root.SelectNodes("item"))
-            res.Add(new ItemSet(
-                c.InnerText,
-                int.Parse(c.Attributes.GetNamedItem("count").Value)
-                ));
+		foreach (XmlNode c in root.SelectNodes("item")) {
+			int count = 1;
+			try{
+				count=int.Parse (c.Attributes.GetNamedItem ("count").Value);
+			} catch (Exception ex) {}
+			res.Add (new ItemSet (
+				c.InnerText,
+				count
+			));
+		}
         return res;
     }
 

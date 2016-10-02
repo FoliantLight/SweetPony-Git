@@ -37,6 +37,9 @@ public class MainPerson : MonoBehaviour {
     /// <summary>Список встреченных НИПов, имена которых известны игроку</summary>
     private List<string> knownNPCNames = new List<string>();
 
+
+	public int money = 30;
+
     private void Awake() {
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -171,6 +174,8 @@ public class MainPerson : MonoBehaviour {
 			prestige += quests [id].prestige;
 		}
 	}
+
+
 
 
 
