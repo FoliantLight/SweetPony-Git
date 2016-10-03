@@ -20,6 +20,6 @@ public class InventoryItem : MonoBehaviour, INote {
     }
 
     public string getNoteString() {
-        return m_info.name;
+        return m_info.inGameName;
     }
 }

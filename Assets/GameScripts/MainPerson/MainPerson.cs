@@ -78,11 +78,15 @@ public class MainPerson : MonoBehaviour {
         }
         #endregion
 
+        setPlatformCollidersEnabled();
+    }
+
+    void setPlatformCollidersEnabled() {
         GameObject[] platforms = GameObject.FindGameObjectsWithTag(Tags.Platform);
         for(int i = 0; i < platforms.Length; i++) {
             BoxCollider2D[] colliders = platforms[i].GetComponents<BoxCollider2D>();
             for(int j = 0; j < colliders.Length; j++) {
-                float colliderY = platforms[i].transform.position.y + colliders[j].offset.y + colliders[j].size.y / 2;
+                float colliderY = ColliderFunctions.colliderTop(colliders[j]);
 
                 if(transform.position.y > colliderY) {
                     colliders[j].enabled = true;
@@ -111,8 +115,7 @@ public class MainPerson : MonoBehaviour {
 
         #region Прыжок
         if (checkGround()) {
-            if (CrossPlatformInputManager.GetButtonDown(Buttons.Jump)) {                
-                m_Anim.SetBool("Grounded", false);
+            if (CrossPlatformInputManager.GetButtonDown(Buttons.Jump)) {
                 m_Anim.SetTrigger("Jmp");
                 m_Rigidbody2D.AddForce(new Vector2(0, GameConsts.JumpForce));
             }
@@ -131,22 +134,22 @@ public class MainPerson : MonoBehaviour {
         #endregion
 
         #region рандомное топтание на месте.
-        if(rnd.Next(m_averageFramesToTrample) == 0) {
+        if(rnd.Next(m_averageFramesToTrample) == 0 && !isMoving) {
             m_Anim.SetTrigger("Trample");
         }
         #endregion
 
-     
+
     }
 
     bool checkGround() {
-        #region Вычисление середины нижней стороны коллидера
-        float downPointXLeft = transform.position.x + m_boxCollider.offset.x - m_boxCollider.size.x / 2.0F;
-        float downPointXRight = transform.position.x + m_boxCollider.offset.x + m_boxCollider.size.x / 2.0F;
-        float downPointY = transform.position.y + m_boxCollider.offset.y - m_boxCollider.size.y / 2;
+        #region Вычисление прямоугольной области проверки столкновения с полом
+        float left = ColliderFunctions.colliderLeft(m_boxCollider);
+        float right = ColliderFunctions.colliderRight(m_boxCollider);
+        float bottom = ColliderFunctions.colliderBottom(m_boxCollider);
 
-        Vector2 topLeft = new Vector2(downPointXLeft, downPointY - checkGroundDiff);
-        Vector2 bottomRight = new Vector2(downPointXRight, downPointY + checkGroundDiff);
+        Vector2 topLeft = new Vector2(left, bottom - checkGroundDiff);
+        Vector2 bottomRight = new Vector2(right, bottom + checkGroundDiff);
         #endregion
 
         Collider2D[] colliders = Physics2D.OverlapAreaAll(topLeft, bottomRight);

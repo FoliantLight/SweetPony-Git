@@ -38,35 +38,28 @@ public class DoorAction : ActionItem {
     }
 
     public override void triggerAction() {
+        float xPos;
+        float yPos;
+
         if(m_inHouse) {
             getOutsideHouse();
-            if(m_insideColliders != null) {
-                m_insideColliders.gameObject.SetActive(false);
-            }
-
-            float xPos = m_outPoint.position.x;
-            if(m_keepXCoordinate) {
-                xPos = m_mainPersonScript.transform.position.x;
-            }
-
-            m_mainPersonScript.transform.position = new Vector3(xPos, m_outPoint.position.y, 0.0F);
-            m_inHouse = false;
+            xPos = m_outPoint.position.x;
+            yPos = m_outPoint.position.y;
         }
         else {
             getInsideHouse();
-
-            if(m_insideColliders != null) {
-                m_insideColliders.gameObject.SetActive(true);
-            }
-
-            float xPos = m_inPoint.position.x;
-            if(m_keepXCoordinate) {
-                xPos = m_mainPersonScript.transform.position.x;
-            }
-
-            m_mainPersonScript.transform.position = new Vector3(xPos, m_inPoint.position.y, 0.0F);
-            m_inHouse = true;
+            xPos = m_inPoint.position.x;
+            yPos = m_inPoint.position.y;
         }
+
+        if(m_insideColliders != null) {
+            m_insideColliders.gameObject.SetActive(!m_inHouse);
+        }
+        if(m_keepXCoordinate) {
+            xPos = m_mainPersonScript.transform.position.x;
+        }
+        m_mainPersonScript.transform.position = new Vector3(xPos, yPos, 0.0F);
+        m_inHouse = !m_inHouse;
     }
 
     public virtual void getInsideHouse() {
@@ -82,10 +75,4 @@ public class DoorAction : ActionItem {
         }
         m_mainPersonScript.GetComponent<SpriteRenderer>().sortingLayerName = SortingLayers.Player;
     }
-
-    #region InterfaceTest implementation
-    public void showText() {
-        Debug.Log("O_o");
-    }
-    #endregion
 }

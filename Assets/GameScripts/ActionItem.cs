@@ -17,22 +17,16 @@ public abstract class ActionItem : MonoBehaviour {
         m_mainPersonScript = MainPerson.getMainPersonScript();
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-        MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
-        if(mpac == null) {
-            return;
-        }
-        mpac.setActionItem(this);
-    }
-
     void OnTriggerExit2D(Collider2D other) {
         MainPersonActionController mpac = other.gameObject.GetComponent<MainPersonActionController>();
         if(mpac == null) {
             return;
         }
 
-        exitAction();
-        mpac.unsetActionItem();
+        if(mpac.actionItem == this) {
+            exitAction();
+            mpac.actionItem = null;
+        }
     }
 
     public virtual bool actionCondition() {

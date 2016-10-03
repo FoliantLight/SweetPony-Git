@@ -5,13 +5,15 @@ public class SpawnScript : MonoBehaviour {
     private Transform m_spawner;
     private Transform m_destroyer;
 
-    public float m_speed;
+    private HashSet<GameObject> m_spawnedObjects;
+
     private System.Random rnd = new System.Random();
 
     public GameObject m_objectToSpawn;
+    public float m_speed;
     public int m_averageFramesToSpawn;
-
-    HashSet<GameObject> m_spawnedObjects;
+    public int m_maximumObjects;
+    public bool m_flip;
 
     // Use this for initialization
     void Start () {
@@ -23,11 +25,15 @@ public class SpawnScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (rnd.Next(m_averageFramesToSpawn) == 0) {
+        if (rnd.Next(m_averageFramesToSpawn) == 0 && m_spawnedObjects.Count < m_maximumObjects) {
             GameObject obj = Instantiate(m_objectToSpawn, m_spawner.position, m_objectToSpawn.transform.rotation) as GameObject;
-            obj.GetComponent<ObjectMover>().setSpeed(m_speed);
-            obj.GetComponent<ObjectMover>().setDestinationPoint(m_destroyer.transform.position);
+            obj.GetComponent<ObjectMover>().speed = m_speed;
+            obj.GetComponent<ObjectMover>().destinationPoint = m_destroyer.transform.position;
             m_spawnedObjects.Add(obj);
+
+            if(m_flip) {
+                obj.GetComponent<SpriteRenderer>().flipX = true;
+            }
         }
     }
 
@@ -35,5 +41,6 @@ public class SpawnScript : MonoBehaviour {
         if(m_spawnedObjects.Contains(obj)) {
             Destroy(obj);
         }
+        m_spawnedObjects.Remove(obj);
     }
 }

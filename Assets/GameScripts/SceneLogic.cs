@@ -12,7 +12,6 @@ public class SceneLogic : MonoBehaviour {
         m_UICanvas = GameObject.Find(ObjectNames.UICanvas);
     }
 	
-	// Update is called once per frame
 	void Update () {
         GameObject textObject = m_UICanvas.transform.GetChild(0).gameObject;
 
@@ -25,7 +24,7 @@ public class SceneLogic : MonoBehaviour {
                 textComponent.text = note.getNoteString();
 
                 float xPoint = hits[i].collider.offset.x + hits[i].collider.transform.position.x;
-                float yPoint = hits[i].collider.gameObject.transform.position.y;
+                float yPoint = hits[i].collider.transform.position.y;
 
                 textObject.transform.position = Camera.main.WorldToScreenPoint(new Vector2(xPoint, yPoint));
                 textObject.transform.position -= new Vector3(0, -textComponent.preferredHeight, 0);

@@ -50,14 +50,14 @@ public class InventoryIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData) {
         transform.position = Input.mousePosition;
-        List<RaycastResult> list = new List<RaycastResult>();
-        m_inventoryCanvas.GetComponent<GraphicRaycaster>().Raycast(eventData, list);
-        for(int i = 0; i < list.Count; i++) {
-            ItemPanel panel = list[i].gameObject.GetComponent<ItemPanel>();
-            if(panel != null) {
-                
-            }
-        }
+//        List<RaycastResult> list = new List<RaycastResult>();
+//        m_inventoryCanvas.GetComponent<GraphicRaycaster>().Raycast(eventData, list);
+//        for(int i = 0; i < list.Count; i++) {
+//            ItemPanel panel = list[i].gameObject.GetComponent<ItemPanel>();
+//            if(panel != null) {
+//                
+//            }
+//        }
     }
 
     public void OnEndDrag(PointerEventData eventData) {
