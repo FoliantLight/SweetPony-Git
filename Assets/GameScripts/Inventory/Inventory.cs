@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>Инвентарь игрока.</summary>
 public class Inventory {
-    private InventoryPanel m_inventoryPanel;
+    private InventoryPanel m_inventoryPanel = null;
     private bool m_takeOnly;
     /// <summary>Список предметов, находящихся в инвентаре</summary>
     private Dictionary<Vector2Int, InventoryItemInfo> m_items;
@@ -114,6 +114,33 @@ public class Inventory {
         m_items.Remove(pos);
     }
 
+    public bool removeItems(List<ItemSet> itemSets) {      
+        List<Vector2Int> deletingPositions = new List<Vector2Int>();
+
+        for(int i = 0; i < itemSets.Count; i++) {
+            ItemSet itemSet = itemSets[i];
+            int count = itemSet.count;
+            InventoryItemInfo info = InventoryItemDictionary.getInstance.getItem(itemSet.name);
+            for(int j = 0; j < itemSet.count; i++) {
+                foreach(var item in m_items) {
+                    if(item.Value.name == info.name) {
+                        count--;
+                        deletingPositions.Add(item.Key);
+                    }
+                }
+            }
+            if(count != 0) {
+                return false;
+            }
+        }
+
+        for(int i = 0; i < deletingPositions.Count; i++) {
+            removeItem(deletingPositions[i]);
+        }
+
+        return true;
+    }
+
     public void setOccupiedCells(Vector2Int pos, Vector2Int size, bool value) {
         for(int i = pos.row; i < pos.row + size.row; i++) {
             for(int j = pos.column; j < pos.column + size.column; j++) {
@@ -151,5 +178,68 @@ public class Inventory {
         int row = number / m_size.column;
         int column = number % m_size.column;
         return new Vector2Int(row, column);
+    }
+
+    //----------------------------------------------------------------------
+
+    /// <summary>Удаляет предмет по его названию</summary>
+    /// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
+    public bool removeItem(InventoryItemInfo info) {
+        {
+            if (m_items.GetEnumerator ().Current.Value.Equals (info)) {
+                removeItem (m_items.GetEnumerator ().Current.Key);
+                return true;
+            }
+        } while (m_items.GetEnumerator ().MoveNext());
+        return false;
+    }
+
+    /// <summary>Удаляет набор одинаковых предметов. Удаление как транзакция</summary>
+    /// <returns><c>true</c>, если может удалить все предметы <c>false</c> если не может удалить хотя бы один</returns>
+    public bool removeItemTransaction(ItemSet it) {
+        if (!have (it))
+            return false;
+        for(int j = 0; j < it.count; j++) {
+            removeItem (InventoryItemDictionary.getInstance.getItem (it.name));
+        }
+        return true;
+    }
+
+
+    /// <summary>Проверка наличия по названию предмета</summary>
+    /// <returns><c>true</c>, если есть хоть один такой предмет <c>false</c> если нет</returns> 
+    public bool have(InventoryItemInfo info) {
+        {
+            if (m_items.GetEnumerator ().Current.Value.Equals (info)) {
+                return true;
+            }
+        } while (m_items.GetEnumerator ().MoveNext());
+        return false;
+    }
+
+    /// <summary>Проверка наличия</summary>
+    /// <returns><c>true</c>, если все предметы есть в инвентаре <c>false</c> если нет хотя бы одного</returns>
+    public bool have(ItemSet it)
+    {
+        int cnt = 0;
+        InventoryItemInfo info = InventoryItemDictionary.getInstance.getItem (it.name);
+        {
+            if (m_items.GetEnumerator ().Current.Value.Equals (info)) {
+                cnt++;
+                if (cnt >= it.count)
+                    return true;
+            }
+        } while (m_items.GetEnumerator ().MoveNext());
+        return false;
+    }
+
+    /// <summary>Проверяет наличие ВСЕХ предметов в инвентаре</summary>
+    public bool haveInInventory(List<ItemSet> it)
+    {
+        bool res = true;
+        for (int i = 0; i < it.Count; i++)
+            if (!have (it [i]))
+                res = false;
+        return res;
     }
 }

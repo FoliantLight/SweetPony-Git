@@ -18,11 +18,6 @@ public class InventoryItemDictionary {
     private InventoryItemDictionary() {
         m_itemDictionary = new Dictionary<string, InventoryItemInfo>();
 
-        addItem("star", new Vector2Int(1, 1));
-        addItem("arrow", new Vector2Int(2, 2));
-        addItem("rhombus", new Vector2Int(3, 2));
-        addItem("gear", new Vector2Int(3, 3));
-
         addItem("bottle", "Бутылка", new Vector2Int(1, 1));
         addItem("swab", "Бесячая\nшвабра", new Vector2Int(3, 2));
     }

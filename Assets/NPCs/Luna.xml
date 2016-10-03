@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<npc name="Luna" x="-3" y="0.5" z="0">
+	<recieved_quests>
+		<quest>24</quest>
+	</recieved_quests>
+	<dialog>
+		<entry id="1" question="Привет) Вопрос1?" animation="">
+			<drag>
+				<item count="1">star</item>
+			</drag>
+			<answ friendly="+100">Ответ 1.1</answ>
+			<answ friendly="-10">Ответ 1.2</answ>
+		</entry>
+		<entry id="1.1" question="Я - Луна. Вопрос 1.1 ?" animation="jump">
+			<name>Луна</name>
+			<answ friendly="+10">Ответ 1.1.1</answ>
+			<answ friendly="0">Ответ 1.1.2</answ>
+		</entry>
+		<entry id="1.2" question="Атака 1.2" animation="kiсk">
+			<answ friendly="+100">Кинуть плюшевым мишкой 1.2.1</answ>
+			<answ friendly="-1">Уйти 1.2.2</answ>
+		</entry>
+		<entry id="1.2.1" question="Завершение диалога 1.2.1" animation="hug_bear">
+			<quest id="24" prestige="+1" minPrestige="0" maxPrestige="0">
+				<description>Принеси стрелку</description>
+				<drag>
+					<item count="1">gear</item>
+				</drag>
+				<drop>
+					<item count="1">arrow</item>
+				</drop>
+			</quest>
+		</entry>
+		<entry id="1.2.2" question="Вы пытались" animation="">
+		</entry>
+		<default question="Завершение диалога по умолчанию" animation="">
+			<item count="1">Параспрайт</item>
+		</default>
+	</dialog>
+</npc>

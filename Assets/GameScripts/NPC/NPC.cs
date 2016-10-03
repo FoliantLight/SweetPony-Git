@@ -10,7 +10,7 @@ using System.IO;
 public class NPC
 {
     /// <summary>Путь для папки с xml.</summary>
-    static public string Path = "Assets/GameScripts/NPC/";
+    static public string Path = "Assets/NPCs/";
 
     /// <summary>Имя нипа. Определяет xml с диалогом и другие файлы для нипа, если понадобится</summary>
     public string name;
@@ -25,8 +25,7 @@ public class NPC
     /// <summary>Диалог с НИПом</summary>
     NPCDialog dialog;
     /// <summary>Номера квестов, которые НИП может принять</summary>
-    List<int> recived_quest = new List<int>();
-
+    public List<int> recived_quest = new List<int>();
     /// <summary>Уровень дружелюбности</summary>
     public int friendly = 0;
     /// <summary>Имя, которым НИП представился игроку</summary>

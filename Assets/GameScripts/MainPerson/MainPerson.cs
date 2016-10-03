@@ -38,10 +38,12 @@ public class MainPerson : MonoBehaviour {
     public List<int> doneQuests = new List<int>();
 
     /// <summary>Полученные, но еще не выполненные квесты</summary>
-    public List<Quest> recievedQuests = new List<Quest>();
+    public List<Quest> quests = new List<Quest>();
 
     /// <summary>Список встреченных НИПов, имена которых известны игроку</summary>
-    public List<string> metNames = new List<string>();
+    private List<string> knownNPCNames = new List<string>();
+
+    public int money = 30;
 
     private void Awake() {
         m_Anim = GetComponent<Animator>();
@@ -164,5 +166,40 @@ public class MainPerson : MonoBehaviour {
 
     public static MainPerson getMainPersonScript() {
         return GameObject.FindGameObjectWithTag(Tags.Player).GetComponent<MainPerson>();
+    }
+
+
+
+    /// <summary>Удаляет все предметы из инвентаря без проверки их наличия в инвентаре</summary>
+    public void drop(List<ItemSet> it) {
+        m_playerInventory.removeItems(it);
+    }
+
+
+
+    /// <summary>Запоминает, что НИП представился игроку</summary>
+    public void addKnownNPCName(String name)
+    {
+        knownNPCNames.Add (name);
+    }
+
+    /// <summary>Если НИП уже представился игроку, то в следующий раз при встрече его имя высвечивается рядом с НИПом</summary>
+    public bool isKnownNPCname(String name)
+    {
+        return knownNPCNames.FindIndex (x => x.Equals (name)) != -1;
+    }
+
+    /// <summary>НИП принимает квест с таким-то номером. Проверить выполнение</summary>
+    public void checkQuest(int q_id)
+    {
+        int id = quests.FindIndex (x => x.id == q_id);
+        if (id == -1)
+            return; // игрок не взял этот квест
+
+        if (m_playerInventory.haveInInventory(quests [id].drop)) { // если эти предметы найдены
+            quests [id].done = true;
+            m_playerInventory.addItems (quests [id].drag);
+            prestige += quests [id].prestige;
+        }
     }
 }

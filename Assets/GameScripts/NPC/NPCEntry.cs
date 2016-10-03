@@ -8,13 +8,13 @@ using System.Xml;
 public class NPCEntry
 { 
     /// <summary>Вопрос NPC</summary>
-    public string question;
+    public string question = "";
 
     /// <summary>Номер вопроса: номер предыдущего + . + номер ответа с 1</summary>
     public string number;
 
     /// <summary>Название анимации, которую воспроизводит НИП ожидая ответа игрока</summary>
-    public string animation;
+    public string animation = "";
 
     /// <summary>Завершается ли диалог этой записью</summary>
     public bool isFinish = false;
@@ -35,6 +35,9 @@ public class NPCEntry
     public List<int> currFriendly = new List<int>();
     public List<int> prevFriendly;
 
+	/// <summary>Если происходит покупка игроком чего нибудь</summary>
+	public int money = 0;
+
 
     /// <summary>Имя, которым себя назвал НИП. Если пустое - значит еще не назвал</summary>
     public string name = "";
@@ -43,19 +46,34 @@ public class NPCEntry
     /// <param name="xml"></param>
     public NPCEntry(XmlNode xml)
     {
-        question = xml.Attributes.GetNamedItem("question").Value;
+		try{
+        	question = xml.Attributes.GetNamedItem("question").Value;
+		} catch (Exception e) {}
+
         if (xml.Name != "default")
             number = xml.Attributes.GetNamedItem("id").Value;
-        animation = xml.Attributes.GetNamedItem("animation").Value;
+		
+		try{
+        	animation = xml.Attributes.GetNamedItem("animation").Value;
+		} catch (Exception e) {}
+
+
+		try{
+			money = int.Parse(xml.Attributes.GetNamedItem("money").Value);
+		} catch (Exception e) {}
+				
+
         foreach (XmlNode ch in xml.SelectNodes("answ"))
         {
+			try{
             currFriendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
+			} catch (Exception e) { currFriendly.Add(0);}
             answers.Add(ch.InnerText);
         }
         isFinish = (answers.Count == 0);
 
         drag = ItemSet.parse(xml.SelectSingleNode("drag"));
-        drag = ItemSet.parse(xml.SelectSingleNode("drop"));
+        drop = ItemSet.parse(xml.SelectSingleNode("drop"));
 
         if (xml.SelectSingleNode("name") != null)
             name = xml.SelectSingleNode("name").InnerText;

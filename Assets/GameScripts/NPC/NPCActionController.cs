@@ -8,13 +8,21 @@ public class NPCActionController : ActionItem {
     Text question;
     Text nameText;
     List<Transform> buttons = new List<Transform>();
+	public Sprite face = null;
+    string name = "";
+
+	private GameObject invCanvas;
+	[SerializeField]
+	private List<ItemSet> items;
+	private Inventory inv;
 
     NPC npc = null;
     /// <summary>Получение ссылок на объекты диалогового окна внутри объекта НИПа</summary>
     protected override void Start () {
         base.Start();
-
-        canvas = transform.FindChild("Canvas");
+		name = this.gameObject.name;
+		Debug.Log (name + "start");
+        canvas = transform.FindChild("NPCDialog");
         question = canvas.FindChild("Question").FindChild("Text").GetComponent<Text>();
         #region Всем созданным кнопкам добавляется обработчик нажатия
         int i = 0;
@@ -23,7 +31,7 @@ public class NPCActionController : ActionItem {
         {
             int buttonNumber = i;
             a.GetComponent<Button>().onClick.AddListener(() => checkAnswer(buttonNumber));
-            Debug.Log("Добавлен обработчик для кнопки " + buttonNumber);
+           // Debug.Log("Добавлен обработчик для кнопки " + buttonNumber);
             buttons.Add(a);
             i++;
             a = canvas.FindChild("NPCAnswer (" + i + ")");
@@ -33,28 +41,52 @@ public class NPCActionController : ActionItem {
         canvas.GetComponent<Canvas>().enabled = false;
     }
 
+	/// <summary>Inventory</summary>
+	void Awake()
+	{
+		invCanvas = GameObject.Find(ObjectNames.InventoryCanvas);
+		if (invCanvas == null) {
+			Debug.Log (name + " не может найти объект " + ObjectNames.InventoryCanvas);
+			return;
+		}
+
+		inv = new Inventory(GameConsts.inventorySize, false);
+		inv.addItems(items);
+	}
+
     /// <summary>Пояление диалогового окна</summary>
-    /// <param name="name">Имя НИПа</param>
-    /// <param name="xmlHasChanged">Если xml изменялся вне игры, его надо сначала зашифровать, чтобы класс NPC мог его правильно считать</param>
     public override void triggerAction() {
         name = this.gameObject.name;
-        bool xmlHasChanged = true;
 
-        if (xmlHasChanged) {
-            NPC.encode(name);
-        }
-            
+        NPC.encode(name); // потом можно отключить
         npc = new NPC(name);
+		Debug.Log (name + " open");
+		if (MainPerson.getMainPersonScript ().isKnownNPCname (name))
+			nameText.text = name;
+		else
+			nameText.text = "";
+		canvas.FindChild ("Circle").GetComponent<Image> ().sprite = face;
 
-        // TODO: canvas.FindChild("Circle").GetComponent<SpriteRender>().sprite = name + "_face.png";
-        nameText.text = "";
+		#region quests reward
+		foreach (int id in npc.recived_quest)
+			MainPerson.getMainPersonScript().checkQuest(id);
+		#endregion
+
         canvas.GetComponent<Canvas>().enabled = true;
         showEntry(npc.getEntry());
     }
 
+	/// <summary>При удалении игрока от НИПа все незабранные предметы исчезают и окна закрываются</summary>
     public override void exitAction() {
-        canvas.GetComponent<Canvas>().enabled = false;
-    }
+		if (canvas != null)
+        	canvas.GetComponent<Canvas>().enabled = false;
+		if (invCanvas != null)
+			invCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(false);
+		if (inv != null) {
+			inv.items.Clear (); 
+			inv.inventoryPanel = null;
+		}
+	}
 
     /// <summary>Прячет кнопку с ответом</summary>
     /// <param name="buttonObject">Объект кнопки с ответом</param>
@@ -79,12 +111,14 @@ public class NPCActionController : ActionItem {
     {
         Debug.Log("Номер записи " + entry.number);
         question.text = entry.question;
+		if (entry.name != "") nameText.text = entry.name;
+
         #region Появляются/скрываются лишние кнопки
         int answersCount;
         if (buttons.Count < entry.answers.Count)
         {
             answersCount = buttons.Count;
-            Debug.Log("Слишком много вариантов ответов " + entry.answers.Count);
+            Debug.Log(name + " НИП Слишком много вариантов ответов " + entry.answers.Count);
         }
         else
         {
@@ -92,6 +126,41 @@ public class NPCActionController : ActionItem {
             for (int i = entry.answers.Count; i < buttons.Count; hideButton(buttons[i++])) ;
         }
         #endregion
+
+		#region drag&drop, money
+		if (entry.drop.Count > 0) {
+            if (m_mainPersonScript.inventory.haveInInventory(entry.drop))
+			{
+				MainPerson.getMainPersonScript().drop(entry.drop);
+			} else{
+				question.text += "\n У тебя нет такого предмета";
+			}
+		}
+		//Debug.Log(name + " drag " +entry.drag.Count);
+		if (entry.drag.Count > 0) 
+		{
+			//Debug.Log(name + " money " + MainPerson.getMainPersonScript().money + " " +entry.money); 
+			if (MainPerson.getMainPersonScript().money > entry.money)
+			{
+				MainPerson.getMainPersonScript().money -= entry.money;
+			//	Debug.Log(name + " money" + MainPerson.getMainPersonScript().money);
+				if (invCanvas == null) 
+					Debug.Log(name + " npc entry - inv canvas is null");
+
+				invCanvas.SetActive(true);
+				invCanvas.transform.GetChild(Inventories.OthersInventory).gameObject.SetActive(true);
+
+				InventoryPanel panel = invCanvas.transform.GetChild(Inventories.OthersInventory).GetComponent<InventoryPanel>();
+				if (panel == null) 
+					Debug.Log(name + " npc entry - inv panel is null");
+				inv.inventoryPanel = panel;
+				inv.addItems(entry.drag);	
+			} else {
+				question.text += "\n Не хватает денег";
+			}
+		}
+		#endregion
+
 
         for (int i = 0; i < answersCount; i++)
         {
@@ -103,15 +172,13 @@ public class NPCActionController : ActionItem {
             // buttons[i].GetComponent<Button>().spriteState.pressedSprite = one_answer_pressed или two_answer_pressed
             #endregion
         }
-        if (entry.name != "")
-            nameText.text = entry.name;
     }
 
     /// <summary>Обработка события нажатия на кнопку ответа</summary>
     public void checkAnswer(int answerNumber)
     {
         if (npc == null) return;
-        Debug.Log("Функция checkAnswer получила номер кнопки " + answerNumber);
+        //Debug.Log("Функция checkAnswer получила номер кнопки " + answerNumber);
         showEntry(npc.getEntry(answerNumber + 1));
     }
 }

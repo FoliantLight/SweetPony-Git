@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
+using UnityEngine;
+
 
 public class NPCDialog
 {
@@ -37,8 +39,20 @@ public class NPCDialog
 
         // если записи для выбранного вопроса не найдено 
         // то завершить диалог записью по умолчанию
-        if (node == null)
-            node = root.SelectSingleNode("default");
+		if (node == null) {
+			node = root.SelectSingleNode ("default");
+			Debug.Log ("default " + node.ToString () + " goto" + node.Attributes.GetNamedItem("goto"));
+		}
+
+		// если запись содержит ссылку на другую запись
+		string gotoNumber = "";
+		try {
+			gotoNumber = node.Attributes.GetNamedItem("goto").Value;
+			Debug.Log("gotoNumber " + gotoNumber);
+		} catch (Exception ex) {}
+
+		if (gotoNumber != "")
+			node = root.SelectSingleNode("entry[@id='" + gotoNumber + "']");
 
         if (currentEntry != null)
             prevFriendly = currentEntry.currFriendly;

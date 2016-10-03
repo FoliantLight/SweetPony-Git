@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<npc name="NoName" x="-3" y="0.5" z="0">
+	<recieved_quests>
+		<quest>24</quest>
+	</recieved_quests>
+	<dialog>
+		<entry id="1" question="Чем я могу помочь?">
+			<answ>Где здесь можно купить еды?</answ>
+			<answ>Я тут недавно, где в этом районе можно развлечься?</answ>
+			<answ friendly="-100">Есть чё?</answ>
+		</entry>
+
+
+		<entry id="1.1" question="Тут через дом есть магазинчик">
+			<answ>Хорошо, еще кое-что...</answ>
+			<answ>Спасибо! До встречи!</answ>
+		</entry>
+
+		<entry id="1.1.1" goto="1"></entry>
+
+		<entry id="1.2" question="В западном направлении есть торговый центр, там еще фонтан стоит. На верхних этажах есть отличный клуб." animation="">
+			<answ>Потрясающе, обязательно загляну!</answ>
+		</entry>
+
+		<entry id="1.2.1" question="Что-то еще?">
+			<answ>Да</answ>
+			<answ>Нет</answ>
+		</entry>
+
+		<entry id="1.2.1.1" goto="1"></entry>
+
+		<entry id="1.3" question="T_T моообилааа">
+			<drag>
+				<item count="1">gear</item>
+			</drag>
+		</entry>
+
+		<default question="Пока!">
+		</default>
+	</dialog>
+</npc>

@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using UnityEngine;
+using System.Linq;
+using System.Text;
+using System;
+
 
 /// <summary>Квест</summary>
 public class Quest
@@ -11,7 +16,7 @@ public class Quest
     /// <summary>Список наборов предметов, которые НИП заберет</summary>
     public List<ItemSet> drop = new List<ItemSet>();
     /// <summary>Выполнен ли квест</summary>
-    public bool isDone = false;
+    public bool done = false;
     /// <summary>Сколько баллов престижа можно получить за выполнение этого квеста</summary>
     public int prestige = 0;
     /// <summary>Минимальное количество баллов престижа, которое может быть у игорока для получения этого квеста</summary>
@@ -19,27 +24,38 @@ public class Quest
     /// <summary>Максимальное количество баллов престижа, которое может быть у игорока для получения этого квеста</summary>
     public int maxPrestige = 0;
 
+	public string description = "";
+
+	public Vector3 destinationPoint;
+
+	public bool useDestPoint = false;
+
 
     /// <summary>Создание квеста</summary>
+	/// <param name="id">Номер квеста. Идентификатор</param>
+	/// <param name="description">Описание</param>
     /// <param name="prestige">Начисление/списание (в зависимости от знака) престижа у игорка за выполнение этого квеста</param>
     /// <param name="minPrestige">Минимальное количество престижа у игрока, при котором он может взять этот квест</param>
     /// <param name="maxPrestige">Максимальное количество престижа у игрока, при котором он может взять этот квест</param>
-    /// <param name="id">Номер квеста. Идентификатор</param>
-    /// <param name="revard">Награда - список наборов предметов</param>
-    public Quest(int id, int prestige, int minPrestige, int maxPrestige, List<ItemSet> drag, List<ItemSet> drop)
+    /// <param name="drag">Что потеряет игрок</param>
+	/// <param name="drop">Что потеряет игрок</param>
+    public Quest(int id, string description, 
+		int prestige, int minPrestige, int maxPrestige, 
+		List<ItemSet> drag, List<ItemSet> drop,
+		Vector3 destPoint, bool useDestPoint)
     {
         this.id = id;
+		this.description = description;
         this.prestige = prestige;
         this.minPrestige = minPrestige;
         this.maxPrestige = maxPrestige;
         this.drag = new List<ItemSet>(drag);
         this.drop = new List<ItemSet>(drop);
+		this.destinationPoint = destPoint;
+		this.useDestPoint = useDestPoint;
     }
+		
 
-    public void done()
-    {
-        isDone = true;
-    }
 
     /// <summary>Парсер списка квестов из узла Xml</summary>
     /// <param name="root">узел, содержащий список квестов</param>
@@ -49,14 +65,27 @@ public class Quest
         var res = new List<Quest>();
         if (root == null) return res;
         foreach (XmlNode c in root.SelectNodes("quest"))
+		{
+			string x = c.Attributes.GetNamedItem ("x").Value;
+			string y = c.Attributes.GetNamedItem ("y").Value;
+			string z = c.Attributes.GetNamedItem ("z").Value;
+			bool usePoint = (x != "") & (y != "");
+
             res.Add(new Quest(
                 int.Parse(c.Attributes.GetNamedItem("id").Value),
+				c.SelectSingleNode("description").Value.ToString(),
                 int.Parse(c.Attributes.GetNamedItem("prestige").Value),
                 int.Parse(c.Attributes.GetNamedItem("minPrestige").Value),
                 int.Parse(c.Attributes.GetNamedItem("maxPrestige").Value),
                 ItemSet.parse(c.SelectSingleNode("drag")),
-                ItemSet.parse(c.SelectSingleNode("drop"))
-                ));
+                ItemSet.parse(c.SelectSingleNode("drop")),
+				new Vector3(
+					float.Parse(x),
+					float.Parse(y),
+					z=="" ? 0 : float.Parse(z)),
+				usePoint
+			));
+		}
         return res;
     }
 
@@ -65,9 +94,11 @@ public class Quest
     /// <returns>Список номеров квестов</returns>
     public static List<int> parseIndexRecieved(XmlNode root)
     {
-        var res = new List<int>();
+		var res = new List<int>();
+		try{
         foreach (XmlNode c in root.SelectNodes("quest"))
             res.Add(int.Parse(c.InnerText));
+		} catch (Exception e) {;}
         return res;
     }
 }
