@@ -6,7 +6,7 @@ using System.Text;
 using System;
 
 
-/// <summary>Квест</summary>
+/// <summary>Квест - не испольузется в альфе</summary>
 public class Quest
 {
     /// <summary>Идентификатор квеста</summary>

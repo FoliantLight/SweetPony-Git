@@ -149,12 +149,12 @@
 			<answ>Окей, я подумаю.</answ>
 		</entry>
 
-		<entry id="1.3.5.1" money="15">
+		<entry id="1.3.5.1" money="15" question="Держи!">
 			<drag><item>gear</item></drag>
-			<answ>Спасибо</answ>
+			<answ>...</answ>
 		</entry>
 
-		<default question="И тебе спасибо, заглядывай еще!"></default>
+		<default question="Заглядывай еще"></default>
 
 		</dialog>
 		</npc>

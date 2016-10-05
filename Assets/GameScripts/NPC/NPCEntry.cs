@@ -31,18 +31,16 @@ public class NPCEntry
     /// <summary>Список возможных ответов</summary>
     public List<string> answers = new List<string>();
 
-    /// <summary>Список изменения дружелюбности для предыдущих ответов</summary>
-    public List<int> currFriendly = new List<int>();
-    public List<int> prevFriendly;
-
 	/// <summary>Если происходит покупка игроком чего нибудь</summary>
 	public int money = 0;
-
 
     /// <summary>Имя, которым себя назвал НИП. Если пустое - значит еще не назвал</summary>
     public string name = "";
 
-    /// <summary>Диалоговая запись - вопрос и ответы из узла XML</summary>
+	/// <summary>Если игрок говорит сам с собой</summary>
+	public bool isMonolog = false;
+
+    /// <summary>Парсинг узла диалоговой записи - вопрос и ответы из узла XML</summary>
     /// <param name="xml"></param>
     public NPCEntry(XmlNode xml)
     {
@@ -61,15 +59,15 @@ public class NPCEntry
 		try{
 			money = int.Parse(xml.Attributes.GetNamedItem("money").Value);
 		} catch (Exception e) {}
+
+		try{
+			isMonolog = xml.Attributes.GetNamedItem("monolog").Value == "true";
+		} catch (Exception e) {}
 				
 
         foreach (XmlNode ch in xml.SelectNodes("answ"))
-        {
-			try{
-            currFriendly.Add(int.Parse(ch.Attributes.GetNamedItem("friendly").Value));
-			} catch (Exception e) { currFriendly.Add(0);}
             answers.Add(ch.InnerText);
-        }
+		
         isFinish = (answers.Count == 0);
 
         drag = ItemSet.parse(xml.SelectSingleNode("drag"));

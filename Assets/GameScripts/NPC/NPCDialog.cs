@@ -14,9 +14,6 @@ public class NPCDialog
     /// <summary>Текущая запись</summary>
     NPCEntry currentEntry = null;
 
-    /// <summary>Изменение дружелюбности в зависимости от номера выбранного ответа</summary>
-    List<int> prevFriendly = new List<int>();
-
     /// <summary> </summary>
     /// <param name="Root">Узел XML, содержащий записи диалога</param>
     public NPCDialog(XmlNode root)
@@ -29,38 +26,38 @@ public class NPCDialog
     /// <returns></returns>
     public NPCEntry getEntry(int answerIndex)
     {
-        XmlNode node;
-        if (currentEntry == null) // первый вопрос
-            node = root.SelectSingleNode("entry[@id='1']");
-        else { 
+		// узел с диалоговой записью
+        XmlNode node; 
+
+		if (currentEntry == null) {
+			// если это первый вопрос
+			node = root.SelectSingleNode ("entry[@id='1']");
+		} else { 
+			// если это не первый вопрос
             node = root.SelectSingleNode("entry[@id='" + 
                 currentEntry.number + "." + answerIndex + "']");
         }
-
-        // если записи для выбранного вопроса не найдено 
-        // то завершить диалог записью по умолчанию
-		if (node == null) {
-			node = root.SelectSingleNode ("default");
-			Debug.Log ("default " + node.ToString () + " goto" + node.Attributes.GetNamedItem("goto"));
-		}
-
+			
 		// если запись содержит ссылку на другую запись
 		string gotoNumber = "";
 		try {
 			gotoNumber = node.Attributes.GetNamedItem("goto").Value;
-			Debug.Log("gotoNumber " + gotoNumber);
 		} catch (Exception ex) {}
 
-		if (gotoNumber != "")
-			node = root.SelectSingleNode("entry[@id='" + gotoNumber + "']");
+		if (gotoNumber != "") {
+			node = root.SelectSingleNode ("entry[@id='" + gotoNumber + "']");
+			Debug.Log ("goto " + gotoNumber);
+		}
 
-        if (currentEntry != null)
-            prevFriendly = currentEntry.currFriendly;
-        currentEntry = new NPCEntry(node);
-        currentEntry.prevFriendly = new List<int>(prevFriendly);
-        return currentEntry;
+		// если записи для выбранного вопроса не найдено, то завершить диалог записью по умолчанию
+		if (node == null) {
+			node = root.SelectSingleNode ("default");
+			Debug.Log ("default");
+		}
+
+		currentEntry = new NPCEntry (node);
+		return currentEntry;
     }
-
 
 }
 

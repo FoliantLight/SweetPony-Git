@@ -14,6 +14,9 @@ public class NPC
 
     /// <summary>Имя нипа. Определяет xml с диалогом и другие файлы для нипа, если понадобится</summary>
     public string name;
+
+	#region параметры НИПа, не исопльзуемые в альфе
+	/*
     /// <summary>Активные - дают квесты и учавствуют в диалогах. Пассивные - не дают заданий, не общаются.</summary>
     bool isActive = true;
     /// <summary>Начальная позиция нипа. Его дом</summary>
@@ -22,12 +25,13 @@ public class NPC
     bool isRandomStartPosition = false;
     /// <summary>Ночные нипы не возвращаются домой для сна</summary>
     bool isNight = true;
+	*/
+	#endregion
+
     /// <summary>Диалог с НИПом</summary>
     NPCDialog dialog;
     /// <summary>Номера квестов, которые НИП может принять</summary>
     public List<int> recived_quest = new List<int>();
-    /// <summary>Уровень дружелюбности</summary>
-    public int friendly = 0;
     /// <summary>Имя, которым НИП представился игроку</summary>
     public string shownName = "";
         
@@ -46,10 +50,13 @@ public class NPC
 
         var root = doc.DocumentElement;
 
+		// не используется в альфе
+		/*
         startPosition = new Vector3(
             float.Parse(root.GetAttribute("x")),
             float.Parse(root.GetAttribute("y")),
             float.Parse(root.GetAttribute("z")));
+            */
 
         recived_quest = Quest.parseIndexRecieved(
             root.GetElementsByTagName("recieved_quests").Item(0));
@@ -64,8 +71,6 @@ public class NPC
     public NPCEntry getEntry(int answerIndex = 0)
     {
         var entry = dialog.getEntry(answerIndex);
-        if (answerIndex != 0)
-            friendly += entry.prevFriendly[answerIndex - 1];
         shownName = entry.name;
         return entry;
     }
@@ -74,7 +79,6 @@ public class NPC
     public void save()
     {
         // TODO: создание XML
-
         // Utils.AES_encrypt(xml)
     }
 

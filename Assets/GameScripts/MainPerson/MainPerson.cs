@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class MainPerson : MonoBehaviour {
@@ -37,8 +38,8 @@ public class MainPerson : MonoBehaviour {
     /// <summary>Список встреченных НИПов, имена которых известны игроку</summary>
     private List<string> knownNPCNames = new List<string>();
 
-
 	public int money = 30;
+
 
     private void Awake() {
         m_Anim = GetComponent<Animator>();
@@ -65,6 +66,7 @@ public class MainPerson : MonoBehaviour {
 	void Update () {
         if(CrossPlatformInputManager.GetButtonDown(Buttons.Inventory)) { 
             m_inventoryCanvas.SetActive(!m_inventoryCanvas.activeSelf);
+			updateMoney(money);
         }
 
         #region Поворот спрайта в направлении движения. Основное направление влево
@@ -76,6 +78,8 @@ public class MainPerson : MonoBehaviour {
         }
         #endregion
     }
+
+
 
     void FixedUpdate() {
         #region основа движения
@@ -175,8 +179,9 @@ public class MainPerson : MonoBehaviour {
 		}
 	}
 
-
-
-
-
+	/// <summary>Выводит баланс игрока над его инвентарём</summary>
+	/// <param name="val">Value.</param>
+	public void updateMoney(int val){
+		m_inventoryCanvas.transform.FindChild ("Card").FindChild ("Text").GetComponent<Text> ().text = val.ToString();
+	}
 }
